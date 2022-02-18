@@ -10,6 +10,10 @@ OBJFILES = utils.o $(TARGET).o
 
 all: $(TARGET)
 
+clean:
+	rm -f $(MAIN).o *~ 
+	rm -f utils.o *~
+
 $(TARGET): $(OBJFILES)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJFILES)
 
