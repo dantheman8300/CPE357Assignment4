@@ -55,12 +55,12 @@ void make_header(int fd, char *pathname){
             write_file(fd, sb);
             make_header(fd, ent->d_name);
         }
-        else{ /* regular file - header to be created. */
+        else{ /* regular file || soft link - header to be created. */
             write(fd, ent->d_name, 100);
             write_file(fd, sb);
         }
     }
-
+    closedir(d);
 }
 
 /* 
