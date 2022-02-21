@@ -63,6 +63,7 @@ void make_header(int fd, char *pathname){
             make_header(fd, ent->d_name);
         }
         else{ /* regular file - header to be created. */
+            write(fd, ent->d_name, 100);
             write_file(fd, sb);
         }
     }
@@ -71,5 +72,11 @@ void make_header(int fd, char *pathname){
 
 void write_file(int fd, struct stat sb){
     char name[NAME_SZ]; /* might go on the write_file function */
+    write(fd, &sb.st_mode, 8);
+    write(fd, &sb.st_uid, 8);
+    write(fd, &sb.st_gid, 8);
+    write(fd, &sb.st_size, 8);
+    write(fd, &sb.st_mtime, 8);
 
+    return;
 }
