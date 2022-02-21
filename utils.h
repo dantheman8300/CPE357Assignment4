@@ -48,7 +48,7 @@
 #define PADCHAR '$'
 #define NAME_SZ 100
 
-typedef struct *Header header;
+typedef struct Header *headerPtr;
 
 struct Header{
   uint8_t name[NAME_LENGTH];
