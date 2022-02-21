@@ -8,6 +8,7 @@
 
 #define BLOCKSIZE 50
 #define PADCHAR '$'
+#define NAME_SZ 100
 
 void makeDataBlocks(int fin, int fout);
 
