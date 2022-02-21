@@ -1,5 +1,25 @@
 #include "utils.h"
 
+void getHeaderName(int fin, header headerAddr){
+  lseek(fin, NAME_OFFSET, SEEK_CUR);  
+  read(fin, headerAddr->name, NAME_LENGTH);
+}
+
+void getHeaderMode(int fin, header headerAddr){
+  lseek(fin, MODE_OFFSET, SEEK_CUR);  
+  read(fin, headerAddr->mode, MODE_LENGTH);
+}
+
+void getHeaderUid(int fin, header headerAddr){
+  lseek(fin, UID_OFFSET, SEEK_CUR);  
+  read(fin, headerAddr->uid, UID_LENGTH);
+}
+
+void getHeaderGid(int fin, header headerAddr){
+  lseek(fin, GID_OFFSET, SEEK_CUR);  
+  read(fin, headerAddr->gid, GID_LENGTH);
+}
+
 /*
   makeDataBlocks
 

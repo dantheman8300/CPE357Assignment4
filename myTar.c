@@ -6,7 +6,6 @@ int main(int argc, char *argv[]){
     struct stat sb;
     int fin, fout;
 
-
     /* Check arguments */
     if(argc < 3){
         printf("Not even arguments");
@@ -25,7 +24,8 @@ int main(int argc, char *argv[]){
         exit(0);
     }
 
-    makeDataBlocks(fin, fout);
+    
+
     return 0;
 }
 
