@@ -7,6 +7,7 @@
 #include<sys/stat.h>
 #include<dirent.h>
 #include<stdint.h>
+#include<string.h>
 
 #define NAME_LENGTH 100
 #define NAME_OFFSET 0
@@ -73,6 +74,6 @@ void makeDataBlocks(int fin, int fout);
 /* mark */ 
 void make_header(int fd, char *pathname);
 
-void write_file(int fd, struct stat sb);
+void write_file(int fd, struct stat sb, char *pathname);
 
 char det_file_type(struct stat sb);

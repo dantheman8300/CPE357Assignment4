@@ -72,12 +72,12 @@ void make_header(int fd, char *pathname){
         /* recurse if directory */
         if (S_ISDIR(sb.st_mode)){
             write(fd, ent->d_name, 100);
-            write_file(fd, sb);
+            write_file(fd, sb, pathname);
             make_header(fd, ent->d_name);
         }
         else{ /* regular file || soft link - header to be created. */
             write(fd, ent->d_name, 100);
-            write_file(fd, sb);
+            write_file(fd, sb, pathname);
         }
     }
     closedir(d);
@@ -89,7 +89,7 @@ void make_header(int fd, char *pathname){
     takes in an open file descriptor and stat structure 
     to write to the tar archive file. 
 */
-void write_file(int fd, struct stat sb){
+void write_file(int fd, struct stat sb, char *pathname){
     char name[NAME_SZ]; /* might go on the write_file function */
     char flag;
     write(fd, &sb.st_mode, 8);
@@ -103,7 +103,17 @@ void write_file(int fd, struct stat sb){
         perror("flag or write");
         exit(EXIT_FAILURE);
     }
-    /* link name here */
+    if ( S_ISLNK(sb.st_mode) && readlink(pathname, name, 100) > 0) {
+        /* link name here */
+        if (strlen(name) <= 99){
+            if ( realloc(name, strlen(name) + 1) == NULL){
+                perror("realloc");
+                exit(EXIT_FAILURE);
+            }
+            name[strlen(name) + 1] = '\0';
+        }
+    }
+    lseek(fd, 257, SEEK_SET);
     write(fd, "ustar\0", 6);
     write(fd, "00", 2); 
     return;
