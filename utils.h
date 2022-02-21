@@ -12,5 +12,8 @@
 
 void makeDataBlocks(int fin, int fout);
 
+/* mark */ 
 void make_header(int fd, char *pathname);
 void write_file(int fd, struct stat sb);
+
+char det_file_type(struct stat sb);
