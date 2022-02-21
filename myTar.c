@@ -1,6 +1,16 @@
 #include "utils.h"
 
 int main(int argc, char *argv[]){
+    DIR *d;
+    struct dirent *ent;
+    struct stat sb;
+    int fd;
+
+    /* checking usage */
+    if (argc != 4){
+        printf("usage: mytar [ctxvS]f tarfile [ path [ ... ] ]\n");
+        return -1;
+    }
 
   int fin, fout;
 
