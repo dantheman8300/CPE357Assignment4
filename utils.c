@@ -85,7 +85,8 @@ void getHeaderPrefix(int fin, headerPtr headerAddr){
 }
 
 headerPtr readAndMakeHeader(int fin){
-  headerPtr header;
+  headerPtr header = malloc(sizeof(header));
+
   getHeaderName(fin, header);
   
   getHeaderMode(fin, header);
@@ -123,9 +124,13 @@ headerPtr readAndMakeHeader(int fin){
 
 void printTableEntry(headerPtr headerAddr){
   printPerms(headerAddr->mode);
+  printf(" ");
   printOwners(headerAddr->uname, headerAddr->gname);
+  printf(" ");
   printSize(headerAddr->size);
+  printf(" ");
   printMtime(headerAddr->mtime);
+  printf(" ");
   printName(headerAddr->name);
 }
 
@@ -134,7 +139,7 @@ void printOwners(char *uname, char *gname){
 }
 
 void printSize(off_t size){
-  printf("%8d", size);
+  printf("%8lld", (long int) size);
 }
 
 void printMtime(time_t mtime){
@@ -337,7 +342,7 @@ void printPerms(mode_t mode){
         p_mask >>= 1;
     }
     strcat(ret, "\0");
-    printf("%s\n", ret);
+    printf("%s", ret);
 }
 
 /* NICO FUNCTION IF NEEDED TO TEST */
