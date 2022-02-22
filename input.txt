@@ -1,4 +1,0 @@
-Testing
-test file
-This is the test file
-My name is Daniel

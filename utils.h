@@ -8,6 +8,8 @@
 #include<dirent.h>
 #include<stdint.h>
 #include<string.h>
+#include<grp.h>
+#include<pwd.h>
 
 #define NAME_LENGTH 100
 #define NAME_OFFSET 0
