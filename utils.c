@@ -163,6 +163,8 @@ void write_file(int fd, struct stat sb, char *pathname){
     char buffer[UNAME_LENGTH];
     struct passwd user;
     struct group grp;
+    dev_t maj;
+    dev_t min;
     write(fd, &sb.st_mode, 8);
     write(fd, &sb.st_uid, 8);
     write(fd, &sb.st_gid, 8);
@@ -194,6 +196,10 @@ void write_file(int fd, struct stat sb, char *pathname){
     strcat(grp.gr_name, "\0");
     write(fd, user.pw_name, 32);
     write(fd, grp.gr_name, 32);
+    maj = (0xFFFF0000 & sb.st_dev);
+    min = (0x0000FFFF & sb.st_dev);
+    write(fd, &maj, 8);
+    write(fd, &min, 8);
     return;
 }
 
