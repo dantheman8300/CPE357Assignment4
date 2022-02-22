@@ -55,7 +55,7 @@
 
 typedef struct Header *headerPtr;
 
-struct Header{
+struct Header {
   char name[NAME_LENGTH];
   /* uint8_t mode[MODE_LENGTH];*/
   mode_t mode;
@@ -95,7 +95,7 @@ headerPtr readAndMakeHeader(int fin);
 
 void printPerms(mode_t mode);
 void printOwners(char *uname, char *gname);
-void printSize(off_t size);
+void printSize(int size);
 void printMtime(time_t mtime);
 void printName(char *name);
 
@@ -110,3 +110,5 @@ char det_file_type(struct stat sb);
 int insert_special_character(char *where, size_t size, int32_t val);
 
 uint32_t extract_special_int(char *where, int len);
+
+int oct2int(uint8_t *oct, int size);

@@ -84,6 +84,7 @@ void getHeaderPrefix(int fin, headerPtr headerAddr){
   read(fin, headerAddr->prefix, PREFIX_LENGTH);
 }
 
+
 headerPtr readAndMakeHeader(int fin){
   headerPtr header = malloc(sizeof(header));
 
@@ -123,13 +124,13 @@ headerPtr readAndMakeHeader(int fin){
 }
 
 void printTableEntry(headerPtr headerAddr){
-  printPerms(headerAddr->mode);
+  printPerms(dec2oct(headerAddr->mode));
   printf(" ");
   printOwners(headerAddr->uname, headerAddr->gname);
   printf(" ");
-  printSize(headerAddr->size);
+  printSize(dec2oct(headerAddr->size));
   printf(" ");
-  printMtime(headerAddr->mtime);
+  printMtime(dec2oct(headerAddr->mtime));
   printf(" ");
   printName(headerAddr->name);
 }
@@ -138,11 +139,12 @@ void printOwners(char *uname, char *gname){
   printf("%s/%s", uname, gname);
 }
 
-void printSize(off_t size){
-  printf("%8lld", (long int) size);
+void printSize(int size){
+  printf("%8d", size);
 }
 
 void printMtime(time_t mtime){
+  
   struct tm *localTime;
   time(&mtime);
   localTime = localtime(&mtime);
@@ -152,6 +154,8 @@ void printMtime(time_t mtime){
                                     localTime->tm_hour, 
                                     localTime->tm_min
                                     );
+                                    
+  /*printf("%d", mtime);*/
 }
 
 void printName(char *name){
