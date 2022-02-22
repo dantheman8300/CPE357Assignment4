@@ -106,7 +106,6 @@ void make_header(int fd, char *pathname);
 void write_file(int fd, struct stat sb, char *pathname);
 
 char det_file_type(struct stat sb);
-char *perms(mode_t mode);
 
 int insert_special_character(char *where, size_t size, int32_t val);
 
