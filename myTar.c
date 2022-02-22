@@ -5,6 +5,7 @@ int main(int argc, char *argv[]){
     struct dirent *ent;
     struct stat sb;
     int fin, fout;
+    headerPtr header;
 
     /* Check arguments */
     if(argc < 3){
@@ -24,7 +25,8 @@ int main(int argc, char *argv[]){
         exit(0);
     }
     
-
+    header = readAndMakeHeader(fin);
+    printTableEntry(header);
 
     return 0;
 }
