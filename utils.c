@@ -134,11 +134,18 @@ void make_header(int fd, char *pathname){
         if (S_ISDIR(sb.st_mode)){
             write(fd, ent->d_name, 100);
             write_file(fd, sb, pathname);
+            /* need some way to detect overflow for prefix*/
             make_header(fd, ent->d_name);
         }
-        else{ /* regular file || soft link - header to be created. */
+        if (S_ISREG(sb.st_mode) || S_ISLNK(sb.st_mode)){ /* regular file || soft link - header to be created. */
             write(fd, ent->d_name, 100);
             write_file(fd, sb, pathname);
+            /* need some way to detect overflow for prefix*/
+        }
+        else{
+            printf("this filetype is not supported\n\
+            supported: DIRs, Symbolic Links, Regular Files.\n\
+            Filename provdied: %s", ent->d_name);
         }
     }
     closedir(d);
@@ -153,6 +160,9 @@ void make_header(int fd, char *pathname){
 void write_file(int fd, struct stat sb, char *pathname){
     char name[NAME_SZ]; /* might go on the write_file function */
     char flag;
+    char buffer[UNAME_LENGTH];
+    struct passwd user;
+    struct group grp;
     write(fd, &sb.st_mode, 8);
     write(fd, &sb.st_uid, 8);
     write(fd, &sb.st_gid, 8);
@@ -171,12 +181,19 @@ void write_file(int fd, struct stat sb, char *pathname){
                 perror("realloc");
                 exit(EXIT_FAILURE);
             }
-            name[strlen(name) + 1] = '\0';
+            strcat(name, "\0");
         }
+        write(fd, name, 100);
     }
     lseek(fd, 257, SEEK_SET);
     write(fd, "ustar\0", 6);
     write(fd, "00", 2); 
+    user = *getpwuid(sb.st_uid);
+    grp = *getgrgid(sb.st_gid); 
+    strcat(user.pw_name, "\0");
+    strcat(grp.gr_name, "\0");
+    write(fd, user.pw_name, 32);
+    write(fd, grp.gr_name, 32);
     return;
 }
 
