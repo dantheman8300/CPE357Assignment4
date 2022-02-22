@@ -117,11 +117,13 @@ headerPtr readAndMakeHeader(int fin){
   getHeaderDevminor(fin, header);
 
   getHeaderPrefix(fin, header);
+  
+  return header;
 }
 
 void printTableEntry(headerPtr headerAddr){
   printPerms(headerAddr->mode);
-  printOwners(*(headerAddr->uname), *(headerAddr->gname));
+  printOwners(headerAddr->uname, headerAddr->gname);
   printSize(headerAddr->size);
   printMtime(headerAddr->mtime);
   printName(headerAddr->name);
@@ -132,7 +134,23 @@ void printOwners(char *uname, char *gname){
 }
 
 void printSize(off_t size){
-  printf("08%d", size);
+  printf("%8d", size);
+}
+
+void printMtime(time_t mtime){
+  struct tm *localTime;
+  time(&mtime);
+  localTime = localtime(&mtime);
+  printf("%4d-%02d-%02d %02d:%02d", localTime->tm_year + 1900,
+                                    localTime->tm_mon,
+                                    localTime->tm_mday,
+                                    localTime->tm_hour, 
+                                    localTime->tm_min
+                                    );
+}
+
+void printName(char *name){
+  printf("%s", name);
 }
 
 
@@ -292,7 +310,7 @@ char det_file_type(struct stat sb){
     testing completed successfully for permissions (rwx);
     awaiting to confirm functionality for file type.
 */
-char *perms(mode_t mode){
+void printPerms(mode_t mode){
     char *ret;
     int p_mask = 0400;
     char i = 9;
@@ -320,5 +338,4 @@ char *perms(mode_t mode){
     }
     strcat(ret, "\0");
     printf("%s\n", ret);
-    return ret;
 }

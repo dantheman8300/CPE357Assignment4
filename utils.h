@@ -10,6 +10,7 @@
 #include<string.h>
 #include<grp.h>
 #include<pwd.h>
+#include<time.h>
 
 #define PERMS 11
 #define NAME_LENGTH 100
@@ -89,7 +90,11 @@ struct Header{
   */
 };
 
-
+void printPerms(mode_t mode);
+void printOwners(char *uname, char *gname);
+void printSize(off_t size);
+void printMtime(time_t mtime);
+void printName(char *name);
 
 void makeDataBlocks(int fin, int fout);
 
