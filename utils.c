@@ -2,7 +2,7 @@
 
 /* Note */
 void getHeaderName(int fin, headerPtr headerAddr){
-  /*lseek(fin, NAME_OFFSET, SEEK_CUR); */
+  /* lseek(fin, NAME_OFFSET, SEEK_CUR); */
   if( read(fin, headerAddr->name, NAME_LENGTH) < NAME_LENGTH){
     printf("fixthis\n");
   } 
@@ -11,118 +11,116 @@ void getHeaderName(int fin, headerPtr headerAddr){
 
 void getHeaderMode(int fin, headerPtr headerAddr){
     /* lseek(fin, MODE_OFFSET, SEEK_CUR); */
+    lseek(fin, MODE_OFFSET, SEEK_SET);
     read(fin, &(headerAddr->mode), MODE_LENGTH);
-    headerAddr->mode <<= 3;  /* HOT FIX NEEDS TO BE LOOKED AT */
-
 }
 
 void getHeaderUid(int fin, headerPtr headerAddr){
-  /*lseek(fin, UID_OFFSET, SEEK_CUR);  */
-  read(fin, &(headerAddr->uid), UID_LENGTH);
+    /*lseek(fin, UID_OFFSET, SEEK_CUR);  */
+    read(fin, &(headerAddr->uid), UID_LENGTH);
 }
 
 void getHeaderGid(int fin, headerPtr headerAddr){
-  /*lseek(fin, GID_OFFSET, SEEK_CUR);  */
-  read(fin, &(headerAddr->gid), GID_LENGTH);
+    /*lseek(fin, GID_OFFSET, SEEK_CUR);  */
+    read(fin, &(headerAddr->gid), GID_LENGTH);
 }
 
 void getHeaderSize(int fin, headerPtr headerAddr){
-  /*lseek(fin, SIZE_OFFSET, SEEK_CUR);  */
-  lseek(fin, 124, SEEK_SET);
-  read(fin, &(headerAddr->size), SIZE_LENGTH);
+    /*lseek(fin, SIZE_OFFSET, SEEK_CUR);  */
+    read(fin, &(headerAddr->size), SIZE_LENGTH);
 }
 
 void getHeaderMtime(int fin, headerPtr headerAddr){
-  /*lseek(fin, MTIME_OFFSET, SEEK_CUR);  */
-  read(fin, &(headerAddr->mtime), MTIME_LENGTH);
+    /*lseek(fin, MTIME_OFFSET, SEEK_CUR);  */
+    read(fin, &(headerAddr->mtime), MTIME_LENGTH);
 }
 
 void getHeaderChksum(int fin, headerPtr headerAddr){
-  /*lseek(fin, CHKSUM_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->chksum, CHKSUM_LENGTH);
+    /*lseek(fin, CHKSUM_OFFSET, SEEK_CUR);  */
+    read(fin, headerAddr->chksum, CHKSUM_LENGTH);
 }
 
 void getHeaderTypeflag(int fin, headerPtr headerAddr){
-  /*lseek(fin, TYPEFLAG_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->typeflag, TYPEFLAG_LENGTH);
+    /*lseek(fin, TYPEFLAG_OFFSET, SEEK_CUR);  */
+    read(fin, headerAddr->typeflag, TYPEFLAG_LENGTH);
 }
 
 void getHeaderLinkname(int fin, headerPtr headerAddr){
-  /*lseek(fin, LINKNAME_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->linkname, LINKNAME_LENGTH);
+    /*lseek(fin, LINKNAME_OFFSET, SEEK_CUR);  */
+    read(fin, headerAddr->linkname, LINKNAME_LENGTH);
 }
 
 void getHeaderMagic(int fin, headerPtr headerAddr){
-  /*lseek(fin, MAGIC_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->magic, MAGIC_LENGTH);
+    /*lseek(fin, MAGIC_OFFSET, SEEK_CUR);  */
+    read(fin, headerAddr->magic, MAGIC_LENGTH);
 }
 
 void getHeaderVersion(int fin, headerPtr headerAddr){
-  /*lseek(fin, VERSION_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->version, VERSION_LENGTH);
+    /*lseek(fin, VERSION_OFFSET, SEEK_CUR);  */
+    read(fin, headerAddr->version, VERSION_LENGTH);
 }
 
 void getHeaderUname(int fin, headerPtr headerAddr){
-  /*lseek(fin, UNAME_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->uname, UNAME_LENGTH);
+    /*lseek(fin, UNAME_OFFSET, SEEK_CUR);  */
+    read(fin, headerAddr->uname, UNAME_LENGTH);
 }
 
 void getHeaderGname(int fin, headerPtr headerAddr){
-  /*lseek(fin, GNAME_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->gname, GNAME_LENGTH);
+    /*lseek(fin, GNAME_OFFSET, SEEK_CUR);  */
+    read(fin, headerAddr->gname, GNAME_LENGTH);
 }
 
 void getHeaderDevmajor(int fin, headerPtr headerAddr){
-  /*lseek(fin, DEVMAJOR_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->devmajor, DEVMAJOR_LENGTH);
+    /*lseek(fin, DEVMAJOR_OFFSET, SEEK_CUR);  */
+    read(fin, headerAddr->devmajor, DEVMAJOR_LENGTH);
 }
 
 void getHeaderDevminor(int fin, headerPtr headerAddr){
-  /*lseek(fin, DEVMINOR_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->devminor, DEVMINOR_LENGTH);
+    /*lseek(fin, DEVMINOR_OFFSET, SEEK_CUR);  */
+    read(fin, headerAddr->devminor, DEVMINOR_LENGTH);
 }
 
 void getHeaderPrefix(int fin, headerPtr headerAddr){
-  /*lseek(fin, PREFIX_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->prefix, PREFIX_LENGTH);
+    /*lseek(fin, PREFIX_OFFSET, SEEK_CUR);  */
+    read(fin, headerAddr->prefix, PREFIX_LENGTH);
 }
 
 headerPtr readAndMakeHeader(int fin){
-  headerPtr header = malloc(sizeof(header));
+    headerPtr header = malloc(sizeof(header));
 
-  getHeaderName(fin, header);  
-  getHeaderMode(fin, header);
-  getHeaderUid(fin, header);
-  getHeaderGid(fin, header);
-  getHeaderSize(fin, header);
-  getHeaderMtime(fin, header);
-  getHeaderChksum(fin, header);
-  getHeaderTypeflag(fin, header);
-  getHeaderLinkname(fin, header);
-  getHeaderMagic(fin, header);
-  getHeaderVersion(fin, header);
-  getHeaderUname(fin, header);
-  getHeaderGname(fin, header);
-  getHeaderDevmajor(fin, header);
-  getHeaderDevminor(fin, header);
-  getHeaderPrefix(fin, header);
+    getHeaderName(fin, header);  
+    getHeaderMode(fin, header);
+    getHeaderUid(fin, header);
+    getHeaderGid(fin, header);
+    getHeaderSize(fin, header);
+    getHeaderMtime(fin, header);
+    getHeaderChksum(fin, header);
+    getHeaderTypeflag(fin, header);
+    getHeaderLinkname(fin, header);
+    getHeaderMagic(fin, header);
+    getHeaderVersion(fin, header);
+    getHeaderUname(fin, header);
+    getHeaderGname(fin, header);
+    getHeaderDevmajor(fin, header);
+    getHeaderDevminor(fin, header);
+    getHeaderPrefix(fin, header);
   
-  return header;
+    return header;
 }
 
 /* verbose option */
 void printTableEntry(headerPtr headerAddr){
-  printPerms(headerAddr->mode);
-  printf(" ");
-  printOwners(headerAddr->uname, headerAddr->gname);
-  printf(" ");
-  printSize(headerAddr->size);
-  printf(" ");
-  printMtime(headerAddr->mtime);
-  printf(" ");
-  printName(headerAddr->name);
-  printf("\n");
-}
+    printPerms(headerAddr->mode);
+    printf(" ");
+    printOwners(headerAddr->uname, headerAddr->gname);
+    printf(" ");
+    printSize(headerAddr->size);
+    printf(" ");
+    printMtime(headerAddr->mtime);
+    printf(" ");
+    printName(headerAddr->name);
+    printf("\n");
+}   
 
 void printOwners(char *uname, char *gname){
   printf("%s/%s", uname, gname);
@@ -309,6 +307,7 @@ void printPerms(mode_t mode){
     char *ret;
     int p_mask = 0400;
     char i = 9;
+    int val = convertDecimalToOctal(mode);
 
     ret = malloc(PERMS);
 
@@ -357,4 +356,18 @@ int insert_special_character(char *where, size_t size, int32_t val){
     }
 
     return err;
+}
+
+int convertDecimalToOctal(int decimalNumber)
+{
+    int octalNumber = 0, i = 1;
+
+    while (decimalNumber != 0)
+    {
+        octalNumber += (decimalNumber % 8) * i;
+        decimalNumber /= 8;
+        i *= 10;
+    }
+
+    return octalNumber;
 }

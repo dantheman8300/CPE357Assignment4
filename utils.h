@@ -102,6 +102,8 @@ void printName(char *name);
 void makeDataBlocks(int fin, int fout);
 
 /* mark */ 
+int convertDecimalToOctal(int decimalNumber);
+
 void make_header(int fd, char *pathname);
 void write_file(int fd, struct stat sb, char *pathname);
 
@@ -110,3 +112,5 @@ char det_file_type(struct stat sb);
 int insert_special_character(char *where, size_t size, int32_t val);
 
 uint32_t extract_special_int(char *where, int len);
+
+long long convertOctalToDecimal(int octalNumber);
