@@ -10,6 +10,7 @@
 #include<string.h>
 #include<grp.h>
 #include<pwd.h>
+#include<arpa/inet.h>
 
 #define PERMS 11
 #define NAME_LENGTH 100
