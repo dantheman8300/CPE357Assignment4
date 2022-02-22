@@ -338,7 +338,6 @@ void printPerms(mode_t mode){
     }
     strcat(ret, "\0");
     printf("%s\n", ret);
-    return ret;
 }
 
 /* NICO FUNCTION IF NEEDED TO TEST */
