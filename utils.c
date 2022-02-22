@@ -1,83 +1,131 @@
 #include "utils.h"
 
+/* Note */
 void getHeaderName(int fin, headerPtr headerAddr){
-  lseek(fin, NAME_OFFSET, SEEK_CUR);  
-  read(fin, headerAddr->name, NAME_LENGTH);
+  /*lseek(fin, NAME_OFFSET, SEEK_CUR); */
+  if(read(fin, headerAddr->name, NAME_LENGTH) < NAME_LENGTH){
+    printf("fixthis\n");
+  } 
 }
 
+
 void getHeaderMode(int fin, headerPtr headerAddr){
-  lseek(fin, MODE_OFFSET, SEEK_CUR);  
+  /* lseek(fin, MODE_OFFSET, SEEK_CUR); */
   read(fin, headerAddr->mode, MODE_LENGTH);
 }
 
 void getHeaderUid(int fin, headerPtr headerAddr){
-  lseek(fin, UID_OFFSET, SEEK_CUR);  
+  /*lseek(fin, UID_OFFSET, SEEK_CUR);  */
   read(fin, headerAddr->uid, UID_LENGTH);
 }
 
 void getHeaderGid(int fin, headerPtr headerAddr){
-  lseek(fin, GID_OFFSET, SEEK_CUR);  
+  /*lseek(fin, GID_OFFSET, SEEK_CUR);  */
   read(fin, headerAddr->gid, GID_LENGTH);
 }
 
 void getHeaderSize(int fin, headerPtr headerAddr){
-  lseek(fin, SIZE_OFFSET, SEEK_CUR);  
+  /*lseek(fin, SIZE_OFFSET, SEEK_CUR);  */
   read(fin, headerAddr->size, SIZE_LENGTH);
 }
 
 void getHeaderMtime(int fin, headerPtr headerAddr){
-  lseek(fin, MTIME_OFFSET, SEEK_CUR);  
+  /*lseek(fin, MTIME_OFFSET, SEEK_CUR);  */
   read(fin, headerAddr->mtime, MTIME_LENGTH);
 }
 
 void getHeaderChksum(int fin, headerPtr headerAddr){
-  lseek(fin, CHKSUM_OFFSET, SEEK_CUR);  
+  /*lseek(fin, CHKSUM_OFFSET, SEEK_CUR);  */
   read(fin, headerAddr->chksum, CHKSUM_LENGTH);
 }
 
 void getHeaderTypeflag(int fin, headerPtr headerAddr){
-  lseek(fin, TYPEFLAG_OFFSET, SEEK_CUR);  
+  /*lseek(fin, TYPEFLAG_OFFSET, SEEK_CUR);  */
   read(fin, headerAddr->typeflag, TYPEFLAG_LENGTH);
 }
 
 void getHeaderLinkname(int fin, headerPtr headerAddr){
-  lseek(fin, LINKNAME_OFFSET, SEEK_CUR);  
+  /*lseek(fin, LINKNAME_OFFSET, SEEK_CUR);  */
   read(fin, headerAddr->linkname, LINKNAME_LENGTH);
 }
 
 void getHeaderMagic(int fin, headerPtr headerAddr){
-  lseek(fin, MAGIC_OFFSET, SEEK_CUR);  
+  /*lseek(fin, MAGIC_OFFSET, SEEK_CUR);  */
   read(fin, headerAddr->magic, MAGIC_LENGTH);
 }
 
 void getHeaderVersion(int fin, headerPtr headerAddr){
-  lseek(fin, VERSION_OFFSET, SEEK_CUR);  
+  /*lseek(fin, VERSION_OFFSET, SEEK_CUR);  */
   read(fin, headerAddr->version, VERSION_LENGTH);
 }
 
 void getHeaderUname(int fin, headerPtr headerAddr){
-  lseek(fin, UNAME_OFFSET, SEEK_CUR);  
+  /*lseek(fin, UNAME_OFFSET, SEEK_CUR);  */
   read(fin, headerAddr->uname, UNAME_LENGTH);
 }
 
 void getHeaderGname(int fin, headerPtr headerAddr){
-  lseek(fin, GNAME_OFFSET, SEEK_CUR);  
+  /*lseek(fin, GNAME_OFFSET, SEEK_CUR);  */
   read(fin, headerAddr->gname, GNAME_LENGTH);
 }
 
 void getHeaderDevmajor(int fin, headerPtr headerAddr){
-  lseek(fin, DEVMAJOR_OFFSET, SEEK_CUR);  
+  /*lseek(fin, DEVMAJOR_OFFSET, SEEK_CUR);  */
   read(fin, headerAddr->devmajor, DEVMAJOR_LENGTH);
 }
 
 void getHeaderDevminor(int fin, headerPtr headerAddr){
-  lseek(fin, DEVMINOR_OFFSET, SEEK_CUR);  
+  /*lseek(fin, DEVMINOR_OFFSET, SEEK_CUR);  */
   read(fin, headerAddr->devminor, DEVMINOR_LENGTH);
 }
 
 void getHeaderPrefix(int fin, headerPtr headerAddr){
-  lseek(fin, PREFIX_OFFSET, SEEK_CUR);  
+  /*lseek(fin, PREFIX_OFFSET, SEEK_CUR);  */
   read(fin, headerAddr->prefix, PREFIX_LENGTH);
+}
+
+headerPtr readAndMakeHeader(int fin){
+  headerPtr header;
+  getHeaderName(fin, header);
+  
+  getHeaderMode(fin, header);
+
+  getHeaderUid(fin, header);
+
+  getHeaderGid(fin, header);
+
+  getHeaderSize(fin, header);
+
+  getHeaderMtime(fin, header);
+
+  getHeaderChksum(fin, header);
+
+  getHeaderTypeflag(fin, header);
+
+  getHeaderLinkname(fin, header);
+
+  getHeaderMagic(fin, header);
+
+  getHeaderVersion(fin, header);
+
+  getHeaderUname(fin, header);
+
+  getHeaderGname(fin, header);
+
+  getHeaderDevmajor(fin, header);
+
+  getHeaderDevminor(fin, header);
+
+  getHeaderPrefix(fin, header);
+}
+
+char *tablePermissions(headerPtr header){
+  char Permissions[PERMISSION_WIDTH];
+  uint8_t *mode = header->mode;
+
+  
+
+
 }
 
 
