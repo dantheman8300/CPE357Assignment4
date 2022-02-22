@@ -24,8 +24,6 @@ int main(int argc, char *argv[]){
         exit(0);
     }
 
-    perms(0777);
-
     return 0;
 }
 
