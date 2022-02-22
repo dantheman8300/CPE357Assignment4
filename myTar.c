@@ -24,10 +24,8 @@ int main(int argc, char *argv[]){
         perror(argv[2]);
         exit(0);
     }
-
-
+    
     header = readAndMakeHeader(fin);
-
     printTableEntry(header);
 
     return 0;
