@@ -160,11 +160,11 @@ void make_header(int fd, char *pathname){
 void write_file(int fd, struct stat sb, char *pathname){
     char name[NAME_SZ]; /* might go on the write_file function */
     char flag;
-    char buffer[UNAME_LENGTH];
     struct passwd user;
     struct group grp;
     dev_t maj;
     dev_t min;
+    
     write(fd, &sb.st_mode, 8);
     write(fd, &sb.st_uid, 8);
     write(fd, &sb.st_gid, 8);
@@ -224,4 +224,9 @@ char det_file_type(struct stat sb){
         return '5';
     }
     return -1; /* lame error-checking here */
+}
+
+char *perms(mode_t mode){
+    char *ret[10];
+    
 }

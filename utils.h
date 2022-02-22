@@ -11,6 +11,7 @@
 #include<grp.h>
 #include<pwd.h>
 
+#define PERMS 10 
 #define NAME_LENGTH 100
 #define NAME_OFFSET 0
 #define MODE_LENGTH 8
