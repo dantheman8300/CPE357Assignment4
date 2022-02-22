@@ -119,6 +119,15 @@ headerPtr readAndMakeHeader(int fin){
   getHeaderPrefix(fin, header);
 }
 
+char *tablePermissions(headerPtr header){
+  char Permissions[PERMISSION_WIDTH];
+  uint8_t *mode = header->mode;
+
+  
+
+
+}
+
 
 /*
   makeDataBlocks
