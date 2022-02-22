@@ -8,30 +8,30 @@ void getHeaderName(int fin, headerPtr headerAddr){
   } 
 }
 
-
 void getHeaderMode(int fin, headerPtr headerAddr){
   /* lseek(fin, MODE_OFFSET, SEEK_CUR); */
-  read(fin, headerAddr->mode, MODE_LENGTH);
+  read(fin, &(headerAddr->mode), MODE_LENGTH);
+
 }
 
 void getHeaderUid(int fin, headerPtr headerAddr){
   /*lseek(fin, UID_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->uid, UID_LENGTH);
+  read(fin, &(headerAddr->uid), UID_LENGTH);
 }
 
 void getHeaderGid(int fin, headerPtr headerAddr){
   /*lseek(fin, GID_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->gid, GID_LENGTH);
+  read(fin, &(headerAddr->gid), GID_LENGTH);
 }
 
 void getHeaderSize(int fin, headerPtr headerAddr){
   /*lseek(fin, SIZE_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->size, SIZE_LENGTH);
+  read(fin, &(headerAddr->size), SIZE_LENGTH);
 }
 
 void getHeaderMtime(int fin, headerPtr headerAddr){
   /*lseek(fin, MTIME_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->mtime, MTIME_LENGTH);
+  read(fin, &(headerAddr->mtime), MTIME_LENGTH);
 }
 
 void getHeaderChksum(int fin, headerPtr headerAddr){
@@ -119,13 +119,20 @@ headerPtr readAndMakeHeader(int fin){
   getHeaderPrefix(fin, header);
 }
 
-char *tablePermissions(headerPtr header){
-  char Permissions[PERMISSION_WIDTH];
-  uint8_t *mode = header->mode;
+void printTableEntry(headerPtr headerAddr){
+  printPerms(headerAddr->mode);
+  printOwners(*(headerAddr->uname), *(headerAddr->gname));
+  printSize(headerAddr->size);
+  printMtime(headerAddr->mtime);
+  printName(headerAddr->name);
+}
 
-  
+void printOwners(char *uname, char *gname){
+  printf("%s/%s", uname, gname);
+}
 
-
+void printSize(off_t size){
+  printf("08%d", size);
 }
 
 
