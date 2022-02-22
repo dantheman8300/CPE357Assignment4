@@ -3,14 +3,16 @@
 /* Note */
 void getHeaderName(int fin, headerPtr headerAddr){
   /*lseek(fin, NAME_OFFSET, SEEK_CUR); */
-  if(read(fin, headerAddr->name, NAME_LENGTH) < NAME_LENGTH){
+  if( read(fin, headerAddr->name, NAME_LENGTH) < NAME_LENGTH){
     printf("fixthis\n");
   } 
+ 
 }
 
 void getHeaderMode(int fin, headerPtr headerAddr){
-  /* lseek(fin, MODE_OFFSET, SEEK_CUR); */
-  read(fin, &(headerAddr->mode), MODE_LENGTH);
+    /* lseek(fin, MODE_OFFSET, SEEK_CUR); */
+    read(fin, &(headerAddr->mode), MODE_LENGTH);
+    headerAddr->mode <<= 3;  /* HOT FIX NEEDS TO BE LOOKED AT */
 
 }
 
@@ -26,6 +28,7 @@ void getHeaderGid(int fin, headerPtr headerAddr){
 
 void getHeaderSize(int fin, headerPtr headerAddr){
   /*lseek(fin, SIZE_OFFSET, SEEK_CUR);  */
+  lseek(fin, 124, SEEK_SET);
   read(fin, &(headerAddr->size), SIZE_LENGTH);
 }
 
@@ -87,41 +90,27 @@ void getHeaderPrefix(int fin, headerPtr headerAddr){
 headerPtr readAndMakeHeader(int fin){
   headerPtr header = malloc(sizeof(header));
 
-  getHeaderName(fin, header);
-  
+  getHeaderName(fin, header);  
   getHeaderMode(fin, header);
-
   getHeaderUid(fin, header);
-
   getHeaderGid(fin, header);
-
   getHeaderSize(fin, header);
-
   getHeaderMtime(fin, header);
-
   getHeaderChksum(fin, header);
-
   getHeaderTypeflag(fin, header);
-
   getHeaderLinkname(fin, header);
-
   getHeaderMagic(fin, header);
-
   getHeaderVersion(fin, header);
-
   getHeaderUname(fin, header);
-
   getHeaderGname(fin, header);
-
   getHeaderDevmajor(fin, header);
-
   getHeaderDevminor(fin, header);
-
   getHeaderPrefix(fin, header);
   
   return header;
 }
 
+/* verbose option */
 void printTableEntry(headerPtr headerAddr){
   printPerms(headerAddr->mode);
   printf(" ");
@@ -132,6 +121,7 @@ void printTableEntry(headerPtr headerAddr){
   printMtime(headerAddr->mtime);
   printf(" ");
   printName(headerAddr->name);
+  printf("\n");
 }
 
 void printOwners(char *uname, char *gname){
@@ -338,7 +328,6 @@ void printPerms(mode_t mode){
             strcat(ret, "x");
         else
             strcat(ret, "-");
-
         p_mask >>= 1;
     }
     strcat(ret, "\0");
