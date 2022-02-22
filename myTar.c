@@ -24,6 +24,10 @@ int main(int argc, char *argv[]){
         exit(0);
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> dd1391a6308b090975af044e155a289bbaa7f530
     return 0;
 }
 

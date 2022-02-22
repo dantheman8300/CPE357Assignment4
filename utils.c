@@ -10,27 +10,28 @@ void getHeaderName(int fin, headerPtr headerAddr){
 
 void getHeaderMode(int fin, headerPtr headerAddr){
   /* lseek(fin, MODE_OFFSET, SEEK_CUR); */
-  read(fin, headerAddr->mode, MODE_LENGTH);
+  read(fin, &(headerAddr->mode), MODE_LENGTH);
+
 }
 
 void getHeaderUid(int fin, headerPtr headerAddr){
   /*lseek(fin, UID_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->uid, UID_LENGTH);
+  read(fin, &(headerAddr->uid), UID_LENGTH);
 }
 
 void getHeaderGid(int fin, headerPtr headerAddr){
   /*lseek(fin, GID_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->gid, GID_LENGTH);
+  read(fin, &(headerAddr->gid), GID_LENGTH);
 }
 
 void getHeaderSize(int fin, headerPtr headerAddr){
   /*lseek(fin, SIZE_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->size, SIZE_LENGTH);
+  read(fin, &(headerAddr->size), SIZE_LENGTH);
 }
 
 void getHeaderMtime(int fin, headerPtr headerAddr){
   /*lseek(fin, MTIME_OFFSET, SEEK_CUR);  */
-  read(fin, headerAddr->mtime, MTIME_LENGTH);
+  read(fin, &(headerAddr->mtime), MTIME_LENGTH);
 }
 
 void getHeaderChksum(int fin, headerPtr headerAddr){
@@ -116,15 +117,40 @@ headerPtr readAndMakeHeader(int fin){
   getHeaderDevminor(fin, header);
 
   getHeaderPrefix(fin, header);
+  
+  return header;
 }
 
-char *tablePermissions(headerPtr header){
-  char Permissions[PERMISSION_WIDTH];
-  uint8_t *mode = header->mode;
+void printTableEntry(headerPtr headerAddr){
+  printPerms(headerAddr->mode);
+  printOwners(headerAddr->uname, headerAddr->gname);
+  printSize(headerAddr->size);
+  printMtime(headerAddr->mtime);
+  printName(headerAddr->name);
+}
 
-  
+void printOwners(char *uname, char *gname){
+  printf("%s/%s", uname, gname);
+}
 
+void printSize(off_t size){
+  printf("%8d", size);
+}
 
+void printMtime(time_t mtime){
+  struct tm *localTime;
+  time(&mtime);
+  localTime = localtime(&mtime);
+  printf("%4d-%02d-%02d %02d:%02d", localTime->tm_year + 1900,
+                                    localTime->tm_mon,
+                                    localTime->tm_mday,
+                                    localTime->tm_hour, 
+                                    localTime->tm_min
+                                    );
+}
+
+void printName(char *name){
+  printf("%s", name);
 }
 
 
@@ -284,7 +310,7 @@ char det_file_type(struct stat sb){
     testing completed successfully for permissions (rwx);
     awaiting to confirm functionality for file type.
 */
-char *perms(mode_t mode){
+void printPerms(mode_t mode){
     char *ret;
     int p_mask = 0400;
     char i = 9;
@@ -312,7 +338,6 @@ char *perms(mode_t mode){
     }
     strcat(ret, "\0");
     printf("%s\n", ret);
-    return ret;
 }
 
 /* NICO FUNCTION IF NEEDED TO TEST */

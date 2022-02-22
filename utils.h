@@ -56,8 +56,24 @@
 typedef struct Header *headerPtr;
 
 struct Header{
-  uint8_t name[NAME_LENGTH];
-  uint8_t mode[MODE_LENGTH];
+  char name[NAME_LENGTH];
+  /* uint8_t mode[MODE_LENGTH];*/
+  mode_t mode;
+  uid_t uid;
+  gid_t gid;
+  off_t size;
+  time_t mtime;
+  uint8_t chksum[CHKSUM_LENGTH];
+  uint8_t typeflag[TYPEFLAG_LENGTH];
+  uint8_t linkname[LINKNAME_LENGTH];
+  uint8_t magic[MAGIC_LENGTH];
+  uint8_t version[VERSION_LENGTH];
+  char uname[UNAME_LENGTH];
+  char gname[GNAME_LENGTH];
+  uint8_t devmajor[DEVMAJOR_LENGTH];
+  uint8_t devminor[DEVMINOR_LENGTH];
+  uint8_t prefix[PREFIX_LENGTH];
+  /*
   uint8_t uid[UID_LENGTH];
   uint8_t gid[GID_LENGTH];
   uint8_t size[SIZE_LENGTH];
@@ -72,7 +88,14 @@ struct Header{
   uint8_t devmajor[DEVMAJOR_LENGTH];
   uint8_t devminor[DEVMINOR_LENGTH];
   uint8_t prefix[PREFIX_LENGTH];
+  */
 };
+
+void printPerms(mode_t mode);
+void printOwners(char *uname, char *gname);
+void printSize(off_t size);
+void printMtime(time_t mtime);
+void printName(char *name);
 
 void makeDataBlocks(int fin, int fout);
 
@@ -81,7 +104,6 @@ void make_header(int fd, char *pathname);
 void write_file(int fd, struct stat sb, char *pathname);
 
 char det_file_type(struct stat sb);
-char *perms(mode_t mode);
 
 int insert_special_character(char *where, size_t size, int32_t val);
 
