@@ -215,11 +215,11 @@ void make_header(int fd, char *pathname){
 void write_file(int fd, struct stat sb, char *pathname){
     char name[NAME_SZ]; /* might go on the write_file function */
     char flag;
-    char buffer[UNAME_LENGTH];
     struct passwd user;
     struct group grp;
     dev_t maj;
     dev_t min;
+    
     write(fd, &sb.st_mode, 8);
     write(fd, &sb.st_uid, 8);
     write(fd, &sb.st_gid, 8);
@@ -279,4 +279,46 @@ char det_file_type(struct stat sb){
         return '5';
     }
     return -1; /* lame error-checking here */
+}
+
+
+/*  
+    perms
+
+    helper function for archive listing to create a list of permissions
+    based on the mode_t mode that is passed in.
+
+    Notes:
+    testing completed successfully for permissions (rwx);
+    awaiting to confirm functionality for file type.
+*/
+char *perms(mode_t mode){
+    char *ret;
+    int p_mask = 0400;
+    char i = 9;
+
+    ret = malloc(PERMS);
+
+    if(S_ISDIR(mode))
+        strcat(ret, "d");
+    else if(S_ISLNK(mode))
+        strcat(ret, "l");
+    else
+        strcat(ret, "-");
+
+    for( ; i > 0 ; i-- ){
+        if ( (p_mask & mode) && ((i % 3) == 0))
+            strcat(ret, "r");
+        else if ((p_mask & mode) && ((i % 3) == 2))
+            strcat(ret, "w");
+        else if ((p_mask & mode) && ((i % 3) == 1))
+            strcat(ret, "x");
+        else
+            strcat(ret, "-");
+
+        p_mask >>= 1;
+    }
+    strcat(ret, "\0");
+    printf("%s\n", ret);
+    return ret;
 }

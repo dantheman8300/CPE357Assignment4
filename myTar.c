@@ -24,7 +24,7 @@ int main(int argc, char *argv[]){
         exit(0);
     }
 
-    printf("%zu\n", sizeof(dev_t));
+    perms(0777);
 
     return 0;
 }
