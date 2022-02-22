@@ -274,7 +274,44 @@ char det_file_type(struct stat sb){
     return -1; /* lame error-checking here */
 }
 
+
+/*  
+    perms
+
+    helper function for archive listing to create a list of permissions
+    based on the mode_t mode that is passed in.
+
+    Notes:
+    testing completed successfully for permissions (rwx);
+    awaiting to confirm functionality for file type.
+*/
 char *perms(mode_t mode){
-    char *ret[10];
-    
+    char *ret;
+    int p_mask = 0400;
+    char i = 9;
+
+    ret = malloc(PERMS);
+
+    if(S_ISDIR(mode))
+        strcat(ret, "d");
+    else if(S_ISLNK(mode))
+        strcat(ret, "l");
+    else
+        strcat(ret, "-");
+
+    for( ; i > 0 ; i-- ){
+        if ( (p_mask & mode) && ((i % 3) == 0))
+            strcat(ret, "r");
+        else if ((p_mask & mode) && ((i % 3) == 2))
+            strcat(ret, "w");
+        else if ((p_mask & mode) && ((i % 3) == 1))
+            strcat(ret, "x");
+        else
+            strcat(ret, "-");
+
+        p_mask >>= 1;
+    }
+    strcat(ret, "\0");
+    printf("%s\n", ret);
+    return ret;
 }
