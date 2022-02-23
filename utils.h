@@ -118,6 +118,9 @@ void printTable_NOV(int tar);
 void printTableNames(headerPtr headerAddr);
 void print_oneshot_nov(int tar, char *s);
 void print_oneshot(int tar, char *s);
+void print_DIR(int tar, headerPtr header, char *s);
+void print_DIR_nov(int tar, headerPtr header, char *s);
+
 
 char det_file_type(struct stat sb);
 

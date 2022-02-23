@@ -137,11 +137,47 @@ void clearHeader(headerPtr header){
     header = NULL;
 }
 
+void print_DIR(int tar, headerPtr header, char *s){
+    printTableEntry(header);
+    int len = strlen(s);
+
+    lseek(tar, 12, SEEK_CUR);
+    lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
+    while(readAndMakeHeader(tar, header)){
+        if( strncmp(s, header->name, len)){
+            break;
+        }
+        printTableEntry(header);
+        lseek(tar, 12, SEEK_CUR);
+        lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
+    }
+}
+
+void print_DIR_nov(int tar, headerPtr header, char *s){
+    printTableNames(header);
+    int len = strlen(s);
+
+    lseek(tar, 12, SEEK_CUR);
+    lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
+    while(readAndMakeHeader(tar, header)){
+        if( strncmp(s, header->name, len)){
+            break;
+        }
+        printTableNames(header);
+        lseek(tar, 12, SEEK_CUR);
+        lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
+    }
+}
+
 void print_oneshot_nov(int tar, char *s){
     headerPtr header = malloc(sizeof(header));
 
     while(readAndMakeHeader(tar, header)){
-        if( !strcmp(header->name, s) ){
+        if( !strncmp(header->name, s, strlen(s)) ){
+            if (*header->typeflag == '5'){ /* new additions */
+                print_DIR_nov(tar, header, s);
+                return;
+            }
             printTableNames(header);
             return;
         }
@@ -158,7 +194,11 @@ void print_oneshot(int tar, char *s){
     headerPtr header = malloc(sizeof(header));
 
     while(readAndMakeHeader(tar, header)){
-        if( !strcmp(header->name, s) ){
+        if( !strncmp(header->name, s, strlen(s)) ){
+            if (*header->typeflag == '5'){
+                print_DIR(tar, header, s);
+                return;
+            }
             printTableEntry(header);
             return;
         }
@@ -212,18 +252,18 @@ void printTableEntry(headerPtr headerAddr){
     printPerms(headerAddr->mode, headerAddr->typeflag);
     printf(" ");
     printOwners(headerAddr->uname, headerAddr->gname);
-    printf(" ");
+    //printf(" ");
     printSize(convertDecimalToOctal(headerAddr->size));
-    printf(" ");
+    //printf(" ");
     printMtime(headerAddr->mtime);
     printf(" ");
     if( strlen(headerAddr->prefix)){ 
         printf("%s/", headerAddr->prefix);
     }
     printName(headerAddr->name);
-    if( strlen(headerAddr->linkname) ){
+    /* if( strlen(headerAddr->linkname) ){
         printf(" -> %s", headerAddr->linkname);
-    }
+    }*/
     printf("\n");
 }
 
@@ -241,7 +281,7 @@ void printOwners(char *uname, char *gname){
 }
 
 void printSize(int size){
-    printf("%d", convertOctalToDecimal(size));
+    printf("%9d ", convertOctalToDecimal(size));
 }
 
 void printMtime(time_t mtime){
