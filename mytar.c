@@ -59,7 +59,12 @@ int main(int argc, char *argv[]){
             printTable_NOV(fin);
         }
         else{
-            
+            if (has_char('v', argv[1])){
+                print_oneshot(fin, argv[3]);
+            }
+            else{
+                print_oneshot_nov(fin, argv[3]);
+            }
         }
     }
 
