@@ -266,7 +266,7 @@ void make_header(int fd, char *pathname){
     /* READ ALL DIRECTORY ENTIRES */
     while ( (ent = readdir(d)) ){
         /* dc about directory points to itself and parent */
-        if ( !strncmp(".", ent->d_name, 1) || !strncmp("..", ent->d_name, 2) )
+        if ( !strncmp(".", ent->d_name, 1) || !strncmp("..", ent->d_name, 2))
             continue;
 
         /* error checking stat */
@@ -282,7 +282,8 @@ void make_header(int fd, char *pathname){
             /* need some way to detect overflow for prefix*/
             make_header(fd, ent->d_name);
         }
-        if (S_ISREG(sb.st_mode) || S_ISLNK(sb.st_mode)){ /* regular file || soft link - header to be created. */
+        /* regular file || soft link - header to be created. */
+        if (S_ISREG(sb.st_mode) || S_ISLNK(sb.st_mode)){ 
             write(fd, ent->d_name, 100);
             write_file(fd, sb, pathname);
             /* need some way to detect overflow for prefix*/
