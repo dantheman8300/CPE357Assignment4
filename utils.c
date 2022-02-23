@@ -11,7 +11,6 @@ void getHeaderName(int fin, headerPtr headerAddr){
 
 void getHeaderMode(int fin, headerPtr headerAddr){
     /* lseek(fin, MODE_OFFSET, SEEK_CUR); */
-    lseek(fin, MODE_OFFSET, SEEK_SET);
     read(fin, &(headerAddr->mode), MODE_LENGTH);
 }
 
@@ -27,7 +26,21 @@ void getHeaderGid(int fin, headerPtr headerAddr){
 
 void getHeaderSize(int fin, headerPtr headerAddr){
     /*lseek(fin, SIZE_OFFSET, SEEK_CUR);  */
-    read(fin, &(headerAddr->size), SIZE_LENGTH);
+    uint8_t sizeOct[SIZE_LENGTH];
+    read(fin, &sizeOct, SIZE_LENGTH);
+    printf("%c\n", sizeOct[0]);
+    printf("%c\n", sizeOct[1]);
+    printf("%c\n", sizeOct[2]);
+    printf("%c\n", sizeOct[3]);
+    printf("%c\n", sizeOct[4]);
+    printf("%c\n", sizeOct[5]);
+    printf("%c\n", sizeOct[6]);
+    printf("%c\n", sizeOct[7]);
+    printf("%c\n", sizeOct[8]);
+    printf("%c\n", sizeOct[9]);
+    printf("%c\n", sizeOct[10]);
+    printf("%c\n", sizeOct[11]);
+    headerAddr->size = oct2int(sizeOct, SIZE_LENGTH);
 }
 
 void getHeaderMtime(int fin, headerPtr headerAddr){
@@ -109,17 +122,35 @@ headerPtr readAndMakeHeader(int fin){
     return header;
 }
 
+void printTable(int tar){
+  headerPtr header;
+  
+  header = readAndMakeHeader(tar);
+  printTableEntry(header);
+  lseek(tar, numberDataBlocks(header->size), SEEK_CUR);
+
+}
+
 /* verbose option */
 void printTableEntry(headerPtr headerAddr){
-  printPerms(convertDecimalToOctal(headerAddr->mode));
+  printPerms(headerAddr->mode);
   printf(" ");
   printOwners(headerAddr->uname, headerAddr->gname);
   printf(" ");
-  printSize(convertDecimalToOctal(headerAddr->size));
+  printSize(headerAddr->size);
   printf(" ");
-  printMtime(convertDecimalToOctal(headerAddr->mtime));
+  printMtime(headerAddr->mtime);
   printf(" ");
   printName(headerAddr->name);
+}
+
+int numberDataBlocks(headerPtr headerAddr){
+  int size = headerAddr->size; 
+  int numBlocks = size / BLOCKSIZE;
+  if(numBlocks % BLOCKSIZE){
+    numBlocks++;
+  }
+  return numBlocks;
 }
 
 void printOwners(char *uname, char *gname){
@@ -374,7 +405,7 @@ int convertDecimalToOctal(int decimalNumber)
     return octalNumber;
 }
 
-long long convertOctalToDecimal(int octalNumber)
+int convertOctalToDecimal(int octalNumber)
 {
     int decimalNumber = 0, i = 0;
 
@@ -388,4 +419,16 @@ long long convertOctalToDecimal(int octalNumber)
     i = 1;
 
     return decimalNumber;
+}
+
+int oct2int(uint8_t *oct, int size){
+  int dec = 0;
+  int i;
+  int currDig = 1;
+  for(i = size -1; i >= 0; i--){
+    printf("%d\n", oct[i] -48);
+    dec += currDig * (oct[i] - 48);
+    currDig *= 8;
+  }
+  return dec;
 }

@@ -12,6 +12,7 @@
 #include<pwd.h>
 #include<arpa/inet.h>
 #include<time.h>
+#include<math.h>
 
 #define PERMS 11
 #define NAME_LENGTH 100
@@ -47,7 +48,7 @@
 #define PREFIX_LENGTH 155
 #define PREFIX_OFFSET 345
 
-#define BLOCKSIZE 50
+#define BLOCKSIZE 512
 #define PERMISSION_WIDTH 10
 
 #define PADCHAR '$'
@@ -101,6 +102,10 @@ void printName(char *name);
 
 void makeDataBlocks(int fin, int fout);
 
+void printTableEntry(headerPtr headerAddr)
+
+int numberDataBlocks(headerPtr headerAddr);
+
 /* mark */ 
 int convertDecimalToOctal(int decimalNumber);
 
@@ -113,8 +118,6 @@ int insert_special_character(char *where, size_t size, int32_t val);
 
 uint32_t extract_special_int(char *where, int len);
 
-<<<<<<< HEAD
 int convertOctalToDecimal(int octalNumber);
-=======
-long long convertOctalToDecimal(int octalNumber);
->>>>>>> b0db7511e086542f981ba411961f9ead212033e0
+
+int oct2int(uint8_t *oct, int size);

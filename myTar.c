@@ -27,7 +27,9 @@ int main(int argc, char *argv[]){
     
     header = readAndMakeHeader(fin);
 
-    printf("%d\n", convertOctalToDecimal(611));
+
+
+    printf("%d\n", oct2int(header->size, SIZE_LENGTH));
 
     return 0;
 }

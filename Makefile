@@ -13,7 +13,7 @@ clean:
 	rm -f utils.o *~
 
 $(TARGET): $(OBJFILES)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJFILES)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJFILES) -lm
 
 utils.o: utils.c utils.h
 	gcc -c utils.c
