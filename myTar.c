@@ -25,11 +25,7 @@ int main(int argc, char *argv[]){
         exit(0);
     }
     
-    char buf[100];
-
-    lseek(fin, 100, SEEK_SET);
-
-    printf("%d\n", read(fin, buf, 4));
+    printTable(fin);
 
     return 0;
 }
