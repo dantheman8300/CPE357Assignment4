@@ -156,6 +156,23 @@ void printTable(int tar){
 }
 
 
+void printTable_NOV(int tar){
+  headerPtr header = malloc(sizeof(header));
+
+  while(readAndMakeHeader(tar, header)){
+    printTableNames(header);
+    lseek(tar, 12, SEEK_CUR);
+    lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
+  }
+  
+}
+
+void printTableNames(headerPtr headerAddr){
+    printName(headerAddr->name);
+    printf("\n");
+}
+
+
 /* verbose option */
 void printTableEntry(headerPtr headerAddr){
     printPerms(headerAddr->mode, headerAddr->typeflag);

@@ -114,6 +114,8 @@ int convertDecimalToOctal(int decimalNumber);
 void make_header(int fd, char *pathname);
 void write_file(int fd, struct stat sb, char *pathname);
 void set_strict(void);
+void printTable_NOV(int tar);
+void printTableNames(headerPtr headerAddr);
 
 char det_file_type(struct stat sb);
 
