@@ -58,7 +58,6 @@ typedef struct Header *headerPtr;
 
 struct Header {
   char name[NAME_LENGTH];
-  /* uint8_t mode[MODE_LENGTH];*/
   mode_t mode;
   uid_t uid;
   gid_t gid;
@@ -102,7 +101,7 @@ void printName(char *name);
 
 void makeDataBlocks(int fin, int fout);
 
-void printTableEntry(headerPtr headerAddr)
+void printTableEntry(headerPtr headerAddr);
 
 int numberDataBlocks(headerPtr headerAddr);
 
