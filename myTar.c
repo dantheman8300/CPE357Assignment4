@@ -1,7 +1,5 @@
 #include "utils.h"
 
-int strict;
-
 int main(int argc, char *argv[]){
     int fin, fout;
     /*DIR *d;
@@ -48,7 +46,7 @@ int main(int argc, char *argv[]){
         exit(0);
     }
     if( has_char('S', argv[1]) ){
-        strict = 1;
+        set_strict();
     }
 
     if( has_char('c', argv[1]){

@@ -1,5 +1,16 @@
 #include "utils.h"
 
+int strict;
+
+void set_strict(){
+    strict = 1;
+    return;
+}
+
+int get_strict(){
+    return strict; 
+}
+
 /* Note */
 int getHeaderName(int fin, headerPtr headerAddr){
   /* lseek(fin, NAME_OFFSET, SEEK_CUR); */
@@ -449,9 +460,8 @@ int has_char(char c, char *str){
     char *pt;
     pt = str;
     while(*pt){
-        if( c == *pt++){
+        if( c == *pt++)
             return 1;
-        }
     }
     return 0;
 }
