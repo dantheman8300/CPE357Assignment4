@@ -41,7 +41,7 @@ void getHeaderMtime(int fin, headerPtr headerAddr){
     char buff[12];
     char *ptr;
     read(fin, &buff, MTIME_LENGTH);
-    headerAddr->mtime = convertOctalToDecimal(strtol(buff, &ptr, 8));
+    headerAddr->mtime = strtol(buff, &ptr, 8);
 }
 
 void getHeaderChksum(int fin, headerPtr headerAddr){
@@ -126,7 +126,7 @@ void printTableEntry(headerPtr headerAddr){
   printf(" ");
   printSize(convertDecimalToOctal(headerAddr->size));
   printf(" ");
-  printMtime(convertDecimalToOctal(headerAddr->mtime));
+  printMtime(headerAddr->mtime);
   printf(" ");
   printName(headerAddr->name);
 }
@@ -140,10 +140,10 @@ void printSize(int size){
 }
 
 void printMtime(time_t mtime){
-    char t[16];
+    char t[17];
     struct tm *timer;
     timer = localtime(&mtime);
-    strftime(t, 16, "%Y-%m-%d %H:%M", timer);
+    strftime(t, 17, "%Y-%m-%d %R", timer);
     /*printf("%4d-%02d-%02d %02d:%02d", localTime->tm_year + 1900,
                                     localTime->tm_mon,
                                     localTime->tm_mday,
@@ -151,6 +151,7 @@ void printMtime(time_t mtime){
                                     localTime->tm_min
                                     ); */
     printf("%s", t);
+
 }
 
 void printName(char *name){
