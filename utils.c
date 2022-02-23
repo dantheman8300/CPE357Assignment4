@@ -3,10 +3,9 @@
 /* Note */
 int getHeaderName(int fin, headerPtr headerAddr){
   /* lseek(fin, NAME_OFFSET, SEEK_CUR); */
-  if( read(fin, headerAddr->name, NAME_LENGTH) <= 0){
-    return 0;
-  } 
-  return 1;
+  return read(fin, headerAddr->name, NAME_LENGTH);
+
+  return ;
  
 }
 
@@ -99,9 +98,7 @@ void getHeaderPrefix(int fin, headerPtr headerAddr){
 headerPtr readAndMakeHeader(int fin){
     headerPtr header = malloc(sizeof(header));
 
-    if(getHeaderName(fin, header)){
-      return NULL;
-    }  
+    getHeaderName(fin, header);
     getHeaderMode(fin, header);
     getHeaderUid(fin, header);
     getHeaderGid(fin, header);
@@ -126,11 +123,9 @@ void printTable(int tar){
   
   header = readAndMakeHeader(tar);
 
-  while(header != NULL){
-    printTableEntry(header);  
-    lseek(tar, numberDataBlocks(header), SEEK_CUR);
-    header = readAndMakeHeader(tar);  
-  }
+  printTableEntry(header);  
+  lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
+  header = readAndMakeHeader(tar);  
 
 }
 
