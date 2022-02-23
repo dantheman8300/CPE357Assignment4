@@ -67,6 +67,15 @@ int main(int argc, char *argv[]){
             }
         }
     }
+    if ( has_char('x', argv[1])){
+      if (has_char('v', argv[1])){
+          extractAllFiles(fin, 1);
+        }
+        else{
+          extractAllFiles(fin, 0);
+        }
+      
+    }
 
     /*
     if( has_char('c', argv[1]){
@@ -94,6 +103,8 @@ int main(int argc, char *argv[]){
         }
     }
     */
+
+  
 
   close(fin);
   return 0;

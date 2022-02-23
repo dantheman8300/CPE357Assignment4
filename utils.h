@@ -92,7 +92,9 @@ struct Header {
   */
 };
 
-void extractFile(int fin, headerPtr headerAddr);
+void extractAllFiles(int fin, int v);
+int extractFile(int fin, headerPtr headerAddr, int v);
+void getData(int fin, int numberDataBlocks, char *data);
 
 void clearHeader(headerPtr header);
 

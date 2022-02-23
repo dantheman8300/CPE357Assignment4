@@ -108,7 +108,6 @@ int readAndMakeHeader(int fin, headerPtr header){
 
   strcpy(prevName, header->name);
   getHeaderName(fin, header);
-  printf("%s\n", header->name);
   if(strlen(header->name) == 0 || strcmp(prevName, header->name) == 0){
     return 0;
   }
@@ -444,12 +443,44 @@ void printPerms(mode_t mode, uint8_t  *t){
     return;
 }
 
-void extractFile(int fin, headerPtr headerAddr){
-  int fout;
+void extractAllFiles(int fin, int v){
+  headerPtr header = malloc(sizeof(header));
+
+  
+  while(extractFile(fin, header, v)){
+    ;
+  }
+
+}
+
+int extractFile(int fin, headerPtr headerAddr, int v){
+  int fout, bytesWritten, numDataBlocks;
+  char *data;
 
   readAndMakeHeader(fin, headerAddr);
+  numDataBlocks = numberDataBlocks(headerAddr);
+  lseek(fin, 12, SEEK_CUR);
 
-  printf("%s\n", headerAddr->name);
+  data = malloc(numDataBlocks*BLOCKSIZE);
+
+  getData(fin, numDataBlocks, data);
+
+  if((fout = open(headerAddr->name, O_CREAT | O_WRONLY | O_TRUNC, headerAddr->mode & 0777)) < 0){
+    return 0;
+  }
+  if(v)
+    printf("%s\n", headerAddr->name);
+
+  write(fout, data, strlen(data));
+
+  close(fout);
+
+  return 1;
+
+}
+
+void getData(int fin, int numberDataBlocks, char *data){
+  read(fin, data, numberDataBlocks * BLOCKSIZE);
 
 }
 
