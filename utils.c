@@ -91,16 +91,15 @@ void getHeaderDevminor(int fin, headerPtr headerAddr){
 
 void getHeaderPrefix(int fin, headerPtr headerAddr){
     /*lseek(fin, PREFIX_OFFSET, SEEK_CUR);  */
-    read(fin, headerAddr->prefix, PREFIX_LENGTH + 11);
+    read(fin, headerAddr->prefix, PREFIX_LENGTH);
+    lseek(fin, 12, SEEK_CUR); 
 }
 
 
-void readAndMakeHeader(int fin, headerPtr header){
+headerPtr readAndMakeHeader(int fin){
+    headerPtr header = malloc(sizeof(header));
 
     getHeaderName(fin, header);
-    /*if(strlen(header->name) == 0){
-        return NULL;
-    }*/
     getHeaderMode(fin, header);
     getHeaderUid(fin, header);
     getHeaderGid(fin, header);
@@ -116,22 +115,19 @@ void readAndMakeHeader(int fin, headerPtr header){
     getHeaderDevmajor(fin, header);
     getHeaderDevminor(fin, header);
     getHeaderPrefix(fin, header);
-    printf("made");
+
     return header;
 }
 
 void printTable(int tar){
     headerPtr header;
 
+    /* size 393 */
     header = readAndMakeHeader(tar);
-    printf("%d\n", header->size);  
-    
     while (header->size > 0){
         printTableEntry(header);  
-        lseek(tar, 512, SEEK_CUR);
-
-        header = readAndMakeHeader(tar);
-        printf("%d\n", header->size);  
+        lseek(tar, 512 * numberDataBlocks(header), SEEK_SET);
+        header = readAndMakeHeader(tar);  /* 0 size */
     }
 }
 
@@ -172,12 +168,6 @@ void printMtime(time_t mtime){
     struct tm *timer;
     timer = localtime(&mtime);
     strftime(t, 17, "%Y-%m-%d %R", timer);
-    /*printf("%4d-%02d-%02d %02d:%02d", localTime->tm_year + 1900,
-                                    localTime->tm_mon,
-                                    localTime->tm_mday,
-                                    localTime->tm_hour, 
-                                    localTime->tm_min
-                                    ); */
     printf("%s", t);
 
 }
@@ -212,6 +202,8 @@ void makeDataBlocks(int fin, int fout){
     all the files (or the singular file) of the path provided
 
     calls upon a helper function to write to the archive file
+
+    NOTE: no way of writing prefix attribute in the header.
 */
 void make_header(int fd, char *pathname){
     DIR *d;
@@ -402,36 +394,36 @@ int insert_special_character(char *where, size_t size, int32_t val){
     return err;
 }
 
+/* helper function found online to
+   help convert from base 10 to 8. */
 int convertDecimalToOctal(int decimalNumber)
 {
     int octalNumber = 0, i = 1;
-
     while (decimalNumber != 0)
     {
         octalNumber += (decimalNumber % 8) * i;
         decimalNumber /= 8;
         i *= 10;
     }
-
     return octalNumber;
 }
 
+/* helper function found online to
+   help convert from base 8 to 10. */
 int convertOctalToDecimal(int octalNumber)
 {
     int decimalNumber = 0, i = 0;
-
     while(octalNumber != 0)
     {
         decimalNumber += (octalNumber%10) * pow(8,i);
         ++i;
         octalNumber/=10;
     }
-
     i = 1;
-
     return decimalNumber;
 }
 
+/* Needed? */
 int oct2int(uint8_t *oct, int size){
   int dec = 0;
   int i;
@@ -442,4 +434,24 @@ int oct2int(uint8_t *oct, int size){
     currDig *= 8;
   }
   return dec;
+}
+
+/*  
+    has_char
+
+    helper function for parsing argv[1] (under proper usage)
+    to find what modes the user specifies.
+
+    Notes:
+    tested and confirmed functionality.
+*/
+int has_char(char c, char *str){
+    char *pt;
+    pt = str;
+    while(*pt){
+        if( c == *pt++){
+            return 1;
+        }
+    }
+    return 0;
 }
