@@ -100,7 +100,7 @@ void printMtime(time_t mtime);
 void printName(char *name);
 
 void makeDataBlocks(int fin, int fout);
-
+void printTable(int tar);
 void printTableEntry(headerPtr headerAddr);
 
 int numberDataBlocks(headerPtr headerAddr);
