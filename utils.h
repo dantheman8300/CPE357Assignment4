@@ -13,6 +13,7 @@
 #include<arpa/inet.h>
 #include<time.h>
 #include<math.h>
+#include<string.h>
 
 #define PERMS 11
 #define NAME_LENGTH 100

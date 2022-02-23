@@ -99,8 +99,9 @@ void getHeaderPrefix(int fin, headerPtr headerAddr){
 headerPtr readAndMakeHeader(int fin){
     headerPtr header = malloc(sizeof(header));
 
-    if(getHeaderName(fin, header)){
-        return NULL;
+    getHeaderName(fin, header);
+    if(strlen(header->name) == 0){
+      return NULL;
     }
     getHeaderMode(fin, header);
     getHeaderUid(fin, header);
@@ -122,14 +123,12 @@ headerPtr readAndMakeHeader(int fin){
 }
 
 void printTable(int tar){
-    headerPtr header;
-  
-    header = readAndMakeHeader(tar);
+  headerPtr header;
 
-    while(header != NULL){
-      
+  header = readAndMakeHeader(tar);
+
+  while(header != NULL){
     printTableEntry(header);  
-    printf("%d\n", numberDataBlocks(header));
     lseek(tar, 12, SEEK_CUR);
     lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
     header = readAndMakeHeader(tar);  
@@ -148,6 +147,7 @@ void printTableEntry(headerPtr headerAddr){
   printMtime(headerAddr->mtime);
   printf(" ");
   printName(headerAddr->name);
+  printf("\n");
 }
 
 int numberDataBlocks(headerPtr headerAddr){
