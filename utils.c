@@ -109,16 +109,16 @@ int readAndMakeHeader(int fin, headerPtr header){
 
   strcpy(prevName, header->name);
   getHeaderName(fin, header);
-  /*if(strlen(header->name) == 0 || strcmp(prevName, header->name) == 0){
+  if(strlen(header->name) == 0 || strcmp(prevName, header->name) == 0){
     return 0;
-  } - although this works, let's use the method nico provided. */
+  }
   getHeaderMode(fin, header);
   getHeaderUid(fin, header);
   getHeaderGid(fin, header);
   getHeaderSize(fin, header);
-  if(header->size <= 0){
+  /*if(header->size <= 0){
       return 0;
-  }
+  }*/
   getHeaderMtime(fin, header);
   getHeaderChksum(fin, header);
   getHeaderTypeflag(fin, header);
@@ -141,12 +141,19 @@ void clearHeader(headerPtr header){
 void printTable(int tar){
   headerPtr header = malloc(sizeof(header));
 
+/* Don't delete */
+/*
+  readAndMakeHeader(tar, header);
+
+  printTableEntry(header);
+*/
+
   while(readAndMakeHeader(tar, header)){
     printTableEntry(header);
     lseek(tar, 12, SEEK_CUR);
     lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
   }
-
+  
 }
 
 
