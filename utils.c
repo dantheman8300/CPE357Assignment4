@@ -11,8 +11,11 @@ void getHeaderName(int fin, headerPtr headerAddr){
 
 void getHeaderMode(int fin, headerPtr headerAddr){
     /* lseek(fin, MODE_OFFSET, SEEK_CUR); */
+    char buff[9];
+    char *ptr;
     lseek(fin, MODE_OFFSET, SEEK_SET);
-    read(fin, &(headerAddr->mode), MODE_LENGTH);
+    read(fin, &buff, MODE_LENGTH);
+    headerAddr->mode = strtol(buff, &ptr, 8);
 }
 
 void getHeaderUid(int fin, headerPtr headerAddr){
@@ -27,12 +30,18 @@ void getHeaderGid(int fin, headerPtr headerAddr){
 
 void getHeaderSize(int fin, headerPtr headerAddr){
     /*lseek(fin, SIZE_OFFSET, SEEK_CUR);  */
-    read(fin, &(headerAddr->size), SIZE_LENGTH);
+    char buff[12];
+    char *ptr;
+    read(fin, &buff, SIZE_LENGTH);
+    headerAddr->size = strtol(buff, &ptr, 8);
 }
 
 void getHeaderMtime(int fin, headerPtr headerAddr){
     /*lseek(fin, MTIME_OFFSET, SEEK_CUR);  */
-    read(fin, &(headerAddr->mtime), MTIME_LENGTH);
+    char buff[12];
+    char *ptr;
+    read(fin, &buff, MTIME_LENGTH);
+    headerAddr->mtime = convertOctalToDecimal(strtol(buff, &ptr, 8));
 }
 
 void getHeaderChksum(int fin, headerPtr headerAddr){
@@ -111,7 +120,7 @@ headerPtr readAndMakeHeader(int fin){
 
 /* verbose option */
 void printTableEntry(headerPtr headerAddr){
-  printPerms(convertDecimalToOctal(headerAddr->mode));
+  printPerms(headerAddr->mode);
   printf(" ");
   printOwners(headerAddr->uname, headerAddr->gname);
   printf(" ");
@@ -127,26 +136,25 @@ void printOwners(char *uname, char *gname){
 }
 
 void printSize(int size){
-  printf("%8d", size);
+  printf("%d", convertOctalToDecimal(size));
 }
 
 void printMtime(time_t mtime){
-  
-  struct tm *localTime;
-  time(&mtime);
-  localTime = localtime(&mtime);
-  printf("%4d-%02d-%02d %02d:%02d", localTime->tm_year + 1900,
+    char t[16];
+    struct tm *timer;
+    timer = localtime(&mtime);
+    strftime(t, 16, "%Y-%m-%d %H:%M", timer);
+    /*printf("%4d-%02d-%02d %02d:%02d", localTime->tm_year + 1900,
                                     localTime->tm_mon,
                                     localTime->tm_mday,
                                     localTime->tm_hour, 
                                     localTime->tm_min
-                                    );
-                                    
-  /*printf("%d", mtime);*/
+                                    ); */
+    printf("%s", t);
 }
 
 void printName(char *name){
-  printf("%s", name);
+    printf("%s", name);
 }
 
 

@@ -12,6 +12,7 @@
 #include<pwd.h>
 #include<arpa/inet.h>
 #include<time.h>
+#include<math.h>
 
 #define PERMS 11
 #define NAME_LENGTH 100
