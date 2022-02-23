@@ -138,13 +138,17 @@ void clearHeader(headerPtr header){
 }
 
 void print_DIR(int tar, headerPtr header, char *s){
+    char ref[100];
     printTableEntry(header);
-    int len = strlen(s);
+    int len;
+
+    strncpy(ref, header->name, strlen(header->name) - 1);
+    len = strlen(ref);
 
     lseek(tar, 12, SEEK_CUR);
     lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
     while(readAndMakeHeader(tar, header)){
-        if( strncmp(s, header->name, len)){
+        if( strncmp(ref, header->name, len)){
             break;
         }
         printTableEntry(header);
@@ -154,9 +158,13 @@ void print_DIR(int tar, headerPtr header, char *s){
 }
 
 void print_DIR_nov(int tar, headerPtr header, char *s){
+    char ref[100];
     printTableNames(header);
-    int len = strlen(s);
+    int len;
 
+    strncpy(ref, header->name, strlen(header->name) - 1);
+    len = strlen(ref);
+    
     lseek(tar, 12, SEEK_CUR);
     lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
     while(readAndMakeHeader(tar, header)){
@@ -173,7 +181,7 @@ void print_oneshot_nov(int tar, char *s){
     headerPtr header = malloc(sizeof(header));
 
     while(readAndMakeHeader(tar, header)){
-        if( !strncmp(header->name, s, strlen(s)) ){
+        if( !strncmp(header->name, s, strlen(header->name) - 1)) {
             if (*header->typeflag == '5'){ /* new additions */
                 print_DIR_nov(tar, header, s);
                 return;
@@ -194,7 +202,7 @@ void print_oneshot(int tar, char *s){
     headerPtr header = malloc(sizeof(header));
 
     while(readAndMakeHeader(tar, header)){
-        if( !strncmp(header->name, s, strlen(s)) ){
+        if( !strncmp(header->name, s, strlen(header->name) - 1) ){
             if (*header->typeflag == '5'){
                 print_DIR(tar, header, s);
                 return;
