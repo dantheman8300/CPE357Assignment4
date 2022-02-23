@@ -122,10 +122,8 @@ void printTable(int tar){
   headerPtr header;
   
   header = readAndMakeHeader(tar);
-  printf("%d\n", numberDataBlocks(header));
   printTableEntry(header);
-  
-  //lseek(tar, numberDataBlocks(header), SEEK_CUR);
+  lseek(tar, numberDataBlocks(header), SEEK_CUR);
 
   /* Add loop */
 
