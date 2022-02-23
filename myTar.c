@@ -25,11 +25,7 @@ int main(int argc, char *argv[]){
         exit(0);
     }
     
-    header = readAndMakeHeader(fin);
-
-
-
-    printf("%d\n", oct2int(header->size, SIZE_LENGTH));
+    printTable(fin);
 
     return 0;
 }

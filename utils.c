@@ -127,7 +127,9 @@ void printTable(int tar){
   
   header = readAndMakeHeader(tar);
   printTableEntry(header);
-  lseek(tar, numberDataBlocks(header->size), SEEK_CUR);
+  lseek(tar, numberDataBlocks(header), SEEK_CUR);
+
+  /* Add loop */
 
 }
 
