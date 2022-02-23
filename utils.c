@@ -21,9 +21,8 @@ int getHeaderName(int fin, headerPtr headerAddr){
 void getHeaderMode(int fin, headerPtr headerAddr){
     /* lseek(fin, MODE_OFFSET, SEEK_CUR); */
     char buff[9];
-    char *ptr;
     read(fin, &buff, MODE_LENGTH);
-    headerAddr->mode = strtol(buff, &ptr, 8);
+    headerAddr->mode = strtol(buff, NULL, 8);
 }
 
 void getHeaderUid(int fin, headerPtr headerAddr){
@@ -159,7 +158,7 @@ void printTable(int tar){
 
 /* verbose option */
 void printTableEntry(headerPtr headerAddr){
-    printPerms(headerAddr->mode);
+    printPerms(headerAddr->mode, headerAddr->typeflag);
     printf(" ");
     printOwners(headerAddr->uname, headerAddr->gname);
     printf(" ");
@@ -167,7 +166,13 @@ void printTableEntry(headerPtr headerAddr){
     printf(" ");
     printMtime(headerAddr->mtime);
     printf(" ");
+    if( strlen(headerAddr->prefix)){ 
+        printf("%s/", headerAddr->prefix);
+    }
     printName(headerAddr->name);
+    if( strlen(headerAddr->linkname) ){
+        printf(" -> %s", headerAddr->linkname);
+    }
     printf("\n");
 }
 
@@ -360,14 +365,14 @@ char det_file_type(struct stat sb){
     testing completed successfully for permissions (rwx);
     awaiting to confirm functionality for file type.
 */
-void printPerms(mode_t mode){
+void printPerms(mode_t mode, uint8_t  *t){
     char *ret;
     int p_mask = 0400;
     char i = 9;
 
-    if(S_ISDIR(mode))
+    if(*t == '5')
         printf("d"); /* strcat(ret, "d"); */
-    else if(S_ISLNK(mode))
+    else if(*t == '2')
         printf("l"); /* strcat(ret, "l"); */
     else
         printf("-"); /* strcat(ret, "-"); */

@@ -96,7 +96,7 @@ void clearHeader(headerPtr header);
 
 int readAndMakeHeader(int fin, headerPtr header);
 
-void printPerms(mode_t mode);
+void printPerms(mode_t mode, uint8_t *t);
 void printOwners(char *uname, char *gname);
 void printSize(int size);
 void printMtime(time_t mtime);
