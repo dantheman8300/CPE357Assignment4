@@ -111,13 +111,13 @@ headerPtr readAndMakeHeader(int fin){
 
 /* verbose option */
 void printTableEntry(headerPtr headerAddr){
-  printPerms(dec2oct(headerAddr->mode));
+  printPerms(convertDecimalToOctal(headerAddr->mode));
   printf(" ");
   printOwners(headerAddr->uname, headerAddr->gname);
   printf(" ");
-  printSize(dec2oct(headerAddr->size));
+  printSize(convertDecimalToOctal(headerAddr->size));
   printf(" ");
-  printMtime(dec2oct(headerAddr->mtime));
+  printMtime(convertDecimalToOctal(headerAddr->mtime));
   printf(" ");
   printName(headerAddr->name);
 }
