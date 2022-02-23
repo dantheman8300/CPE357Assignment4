@@ -3,10 +3,8 @@
 /* Note */
 int getHeaderName(int fin, headerPtr headerAddr){
   /* lseek(fin, NAME_OFFSET, SEEK_CUR); */
-  if( read(fin, headerAddr->name, NAME_LENGTH) <= 0){
-    return 1;
-  } 
-  return 0;
+  strcpy(headerAddr->name, "");
+  read(fin, headerAddr->name, NAME_LENGTH);
  
 }
 
@@ -96,57 +94,63 @@ void getHeaderPrefix(int fin, headerPtr headerAddr){
 }
 
 
-void readAndMakeHeader(int fin, headerPtr header){
+int readAndMakeHeader(int fin, headerPtr header){
 
-    getHeaderName(fin, header);
-    getHeaderMode(fin, header);
-    getHeaderUid(fin, header);
-    getHeaderGid(fin, header);
-    getHeaderSize(fin, header);
-    getHeaderMtime(fin, header);
-    getHeaderChksum(fin, header);
-    getHeaderTypeflag(fin, header);
-    getHeaderLinkname(fin, header);
-    getHeaderMagic(fin, header);
-    getHeaderVersion(fin, header);
-    getHeaderUname(fin, header);
-    getHeaderGname(fin, header);
-    getHeaderDevmajor(fin, header);
-    getHeaderDevminor(fin, header);
-    getHeaderPrefix(fin, header);
-  
-    return header;
+  char prevName[NAME_LENGTH];
+
+  strcpy(prevName, header->name);
+
+  getHeaderName(fin, header);
+  if(strlen(header->name) == 0 || strcmp(prevName, header->name) == 0){
+    return 0;
+  }
+  getHeaderMode(fin, header);
+  getHeaderUid(fin, header);
+  getHeaderGid(fin, header);
+  getHeaderSize(fin, header);
+  getHeaderMtime(fin, header);
+  getHeaderChksum(fin, header);
+  getHeaderTypeflag(fin, header);
+  getHeaderLinkname(fin, header);
+  getHeaderMagic(fin, header);
+  getHeaderVersion(fin, header);
+  getHeaderUname(fin, header);
+  getHeaderGname(fin, header);
+  getHeaderDevmajor(fin, header);
+  getHeaderDevminor(fin, header);
+  getHeaderPrefix(fin, header);
+
+  return 1;
+}
+
+void clearHeader(headerPtr header){
+    header = NULL;
 }
 
 void printTable(int tar){
   headerPtr header = malloc(sizeof(header));
-
-  readAndMakeHeader(tar, header);
+/*
+  printf("%d\n", readAndMakeHeader(tar, header));
   printTableEntry(header);  
   lseek(tar, 12, SEEK_CUR);
   lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
-  readAndMakeHeader(tar, header);
+  printf("%d\n", readAndMakeHeader(tar, header));
   printTableEntry(header);  
   lseek(tar, 12, SEEK_CUR);
   lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
-  readAndMakeHeader(tar, header);
+  printf("%d\n", readAndMakeHeader(tar, header));
   printTableEntry(header);  
+  lseek(tar, 12, SEEK_CUR);
+  lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
+  printf("%d\n", readAndMakeHeader(tar, header));
+  printTableEntry(header);  
+*/
 
-
-
-  /*
-
-  while(header != NULL){
-    printf("\"%s\"\n", header->name);
-    printf("%o\n", header->mode);
-    printf("\"%s/%s\"\n", header->uname, header->gname);
-    printf("%d\n", header->size);
-    printTableEntry(header);  
+  while(readAndMakeHeader(tar, header)){
+    printTableEntry(header);
     lseek(tar, 12, SEEK_CUR);
     lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
-    readAndMakeHeader(tar, header);  
   }
-  */
 
 }
 
