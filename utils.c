@@ -100,7 +100,6 @@ void getHeaderDevminor(int fin, headerPtr headerAddr){
 void getHeaderPrefix(int fin, headerPtr headerAddr){
     /*lseek(fin, PREFIX_OFFSET, SEEK_CUR);  */
     read(fin, headerAddr->prefix, PREFIX_LENGTH);
-    lseek(fin, 12, SEEK_CUR); 
 }
 
 
@@ -368,32 +367,24 @@ void printPerms(mode_t mode){
     int p_mask = 0400;
     char i = 9;
 
-    if( (ret = malloc(PERMS)) == NULL ){
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-
     if(S_ISDIR(mode))
-        strcat(ret, "d");
+        printf("d"); /* strcat(ret, "d"); */
     else if(S_ISLNK(mode))
-        strcat(ret, "l");
+        printf("l"); /* strcat(ret, "l"); */
     else
-        strcat(ret, "-");
+        printf("-"); /* strcat(ret, "-"); */
 
     for( ; i > 0 ; i-- ){
         if ( (p_mask & mode) && ((i % 3) == 0))
-            strcat(ret, "r");
+            printf("r"); /* strcat(ret, "r"); */
         else if ((p_mask & mode) && ((i % 3) == 2))
-            strcat(ret, "w");
+            printf("w"); /* strcat(ret, "w"); */
         else if ((p_mask & mode) && ((i % 3) == 1))
-            strcat(ret, "x");
+            printf("x"); /* strcat(ret, "x"); */
         else
-            strcat(ret, "-");
+            printf("-"); /* strcat(ret, "-"); */
         p_mask >>= 1;
     }
-    strcat(ret, "\0");
-    printf("%s", ret);
-    free(ret);
     return;
 }
 
