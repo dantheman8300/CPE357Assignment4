@@ -27,6 +27,7 @@ int main(int argc, char *argv[]){
     
     printTable(fin);
 
+    close(fin);
     return 0;
 }
 

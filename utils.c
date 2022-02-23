@@ -3,18 +3,17 @@
 /* Note */
 int getHeaderName(int fin, headerPtr headerAddr){
   /* lseek(fin, NAME_OFFSET, SEEK_CUR); */
-  if( read(fin, headerAddr->name, NAME_LENGTH) <= 0){
+  /*if( read(fin, headerAddr->name, NAME_LENGTH) <= 0){
     return 1;
   } 
-  return 0;
- 
+  return 0; */
+    read(fin, headerAddr->name, NAME_LENGTH);
 }
 
 void getHeaderMode(int fin, headerPtr headerAddr){
     /* lseek(fin, MODE_OFFSET, SEEK_CUR); */
     char buff[9];
     char *ptr;
-    lseek(fin, MODE_OFFSET, SEEK_SET);
     read(fin, &buff, MODE_LENGTH);
     headerAddr->mode = strtol(buff, &ptr, 8);
 }
@@ -31,7 +30,7 @@ void getHeaderGid(int fin, headerPtr headerAddr){
 
 void getHeaderSize(int fin, headerPtr headerAddr){
     /*lseek(fin, SIZE_OFFSET, SEEK_CUR);  */
-    char buff[12];
+    char buff[13];
     char *ptr;
     read(fin, &buff, SIZE_LENGTH);
     headerAddr->size = strtol(buff, &ptr, 8);
@@ -92,7 +91,7 @@ void getHeaderDevminor(int fin, headerPtr headerAddr){
 
 void getHeaderPrefix(int fin, headerPtr headerAddr){
     /*lseek(fin, PREFIX_OFFSET, SEEK_CUR);  */
-    read(fin, headerAddr->prefix, PREFIX_LENGTH);
+    read(fin, headerAddr->prefix, PREFIX_LENGTH + 11);
 }
 
 
@@ -100,9 +99,9 @@ headerPtr readAndMakeHeader(int fin){
     headerPtr header = malloc(sizeof(header));
 
     getHeaderName(fin, header);
-    if(strlen(header->name) == 0){
-      return NULL;
-    }
+    /*if(strlen(header->name) == 0){
+        return NULL;
+    }*/
     getHeaderMode(fin, header);
     getHeaderUid(fin, header);
     getHeaderGid(fin, header);
@@ -118,53 +117,55 @@ headerPtr readAndMakeHeader(int fin){
     getHeaderDevmajor(fin, header);
     getHeaderDevminor(fin, header);
     getHeaderPrefix(fin, header);
-  
+    printf("made");
     return header;
 }
 
 void printTable(int tar){
-  headerPtr header;
+    headerPtr header;
 
-  header = readAndMakeHeader(tar);
+    header = readAndMakeHeader(tar);
+    printf("%d\n", header->size);  
+    
+    while (header->size > 0){
+        printTableEntry(header);  
+        lseek(tar, 512, SEEK_CUR);
 
-  while(header != NULL){
-    printTableEntry(header);  
-    lseek(tar, 12, SEEK_CUR);
-    lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
-    header = readAndMakeHeader(tar);  
-  }
-
+        header = readAndMakeHeader(tar);
+        printf("%d\n", header->size);  
+    }
 }
+
 
 /* verbose option */
 void printTableEntry(headerPtr headerAddr){
-  printPerms(headerAddr->mode);
-  printf(" ");
-  printOwners(headerAddr->uname, headerAddr->gname);
-  printf(" ");
-  printSize(convertDecimalToOctal(headerAddr->size));
-  printf(" ");
-  printMtime(headerAddr->mtime);
-  printf(" ");
-  printName(headerAddr->name);
-  printf("\n");
+    printPerms(headerAddr->mode);
+    printf(" ");
+    printOwners(headerAddr->uname, headerAddr->gname);
+    printf(" ");
+    printSize(convertDecimalToOctal(headerAddr->size));
+    printf(" ");
+    printMtime(headerAddr->mtime);
+    printf(" ");
+    printName(headerAddr->name);
+    printf("\n");
 }
 
 int numberDataBlocks(headerPtr headerAddr){
-  int size = headerAddr->size; 
-  int numBlocks = size / BLOCKSIZE;
-  if(size % BLOCKSIZE){
-    numBlocks++;
-  }
-  return numBlocks;
+    int size = headerAddr->size; 
+    int numBlocks = size / BLOCKSIZE;
+    if(size % BLOCKSIZE){
+        numBlocks++;
+    }
+    return numBlocks;
 }
 
 void printOwners(char *uname, char *gname){
-  printf("%s/%s", uname, gname);
+    printf("%s/%s", uname, gname);
 }
 
 void printSize(int size){
-  printf("%d", convertOctalToDecimal(size));
+    printf("%d", convertOctalToDecimal(size));
 }
 
 void printMtime(time_t mtime){
@@ -293,7 +294,7 @@ void write_file(int fd, struct stat sb, char *pathname){
         }
         write(fd, name, 100);
     }
-    lseek(fd, 257, SEEK_SET);
+    /* lseek(fd, 257, SEEK_SET); */
     write(fd, "ustar\0", 6);
     write(fd, "00", 2); 
     user = *getpwuid(sb.st_uid);
