@@ -42,7 +42,58 @@ int main(int argc, char *argv[]){
                 or even how to implement 'v'
     ***************************************************/
     
-  
+    
+    if( !has_char('f', argv[1]) ){
+        printf("you are missing \'f\' argument. \
+                please include it to use myTar");
+        exit(0);
+    }
+    if( has_char('S', argv[1]) || has_char('s', argv[1]) ){
+        set_strict();
+    }
+    if (has_char('t', argv[1])){
+        if (has_char('v', argv[1]) && (argc == 3)){
+            printTable(fin);
+        }
+        else if (!has_char('v', argv[1]) && (argc == 3)){
+            printTable_NOV(fin);
+        }
+        else{
+            if (has_char('v', argv[1])){
+                print_oneshot(fin, argv[3]);
+            }
+            else{
+                print_oneshot_nov(fin, argv[3]);
+            }
+        }
+    }
+
+    /*
+    if( has_char('c', argv[1]){
+        if (has_char('v', argv[1])){
+
+        }
+        else{
+
+        }
+    }
+    else if ( has_char('t', argv[1])){
+        if (has_char('v', argv[1])){
+
+        }
+        else{
+            
+        }
+    }
+    else if ( has_char('x', argv[1])){
+        if (has_char('v', argv[1])){
+            
+        }
+        else{
+            
+        }
+    }
+    */
 
   close(fin);
   return 0;

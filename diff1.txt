@@ -1,4 +1,0 @@
-drwx------ mkong04/domain users 0 2022-02-23 11:52 basic/
--rw------- mkong04/domain users 20 2022-02-23 11:52 basic/test1
--rw------- mkong04/domain users 0 2022-02-23 11:52 basic/empty
-lrwxrwxrwx mkong04/domain users 0 2022-02-23 11:52 basic/rando_link -> //home/pn-cs357/demos/

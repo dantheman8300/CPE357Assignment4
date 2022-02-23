@@ -138,6 +138,40 @@ void clearHeader(headerPtr header){
     header = NULL;
 }
 
+void print_oneshot_nov(int tar, char *s){
+    headerPtr header = malloc(sizeof(header));
+
+    while(readAndMakeHeader(tar, header)){
+        if( !strcmp(header->name, s) ){
+            printTableNames(header);
+            return;
+        }
+        lseek(tar, 12, SEEK_CUR);
+        lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
+    }
+
+    printf("tar: %s: Not found in archive\n", s);
+    printf("tar: Exiting with failure status due to previous errors\n");
+    exit(3);
+}
+
+void print_oneshot(int tar, char *s){
+    headerPtr header = malloc(sizeof(header));
+
+    while(readAndMakeHeader(tar, header)){
+        if( !strcmp(header->name, s) ){
+            printTableEntry(header);
+            return;
+        }
+        lseek(tar, 12, SEEK_CUR);
+        lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
+    }
+
+    printf("tar: %s: Not found in archive\n", s);
+    printf("tar: Exiting with failure status due to previous errors\n");
+    exit(3);
+}
+
 void printTable(int tar){
   headerPtr header = malloc(sizeof(header));
 

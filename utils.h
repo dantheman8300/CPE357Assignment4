@@ -118,6 +118,8 @@ void write_file(int fd, struct stat sb, char *pathname);
 void set_strict(void);
 void printTable_NOV(int tar);
 void printTableNames(headerPtr headerAddr);
+void print_oneshot_nov(int tar, char *s);
+void print_oneshot(int tar, char *s);
 
 char det_file_type(struct stat sb);
 
