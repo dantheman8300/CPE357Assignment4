@@ -14,7 +14,7 @@ int get_strict(){
 /* Note */
 int getHeaderName(int fin, headerPtr headerAddr){
   /* lseek(fin, NAME_OFFSET, SEEK_CUR); */
-  printf("%d\n", read(fin, headerAddr->name, NAME_LENGTH));
+  read(fin, headerAddr->name, NAME_LENGTH);
  
 }
 
@@ -108,9 +108,7 @@ int readAndMakeHeader(int fin, headerPtr header){
   char prevName[NAME_LENGTH];
 
   strcpy(prevName, header->name);
-  printf("%s\n",header->name);
   getHeaderName(fin, header);
-  printf("%s\n",header->name);
   if(strlen(header->name) == 0 || strcmp(prevName, header->name) == 0){
     return 0;
   }
@@ -140,21 +138,23 @@ void clearHeader(headerPtr header){
 void printTable(int tar){
   headerPtr header = malloc(sizeof(header));
 
+  /*
+
   printf("%d\n", readAndMakeHeader(tar, header));
   printTableEntry(header);  
   lseek(tar, 12, SEEK_CUR);
   lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
   printf("%d\n", readAndMakeHeader(tar, header));
   printTableEntry(header);  
+  */
  
 
-/*
+
   while(readAndMakeHeader(tar, header)){
     printTableEntry(header);
     lseek(tar, 12, SEEK_CUR);
     lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
   }
-  */
 
 }
 
