@@ -113,4 +113,8 @@ int insert_special_character(char *where, size_t size, int32_t val);
 
 uint32_t extract_special_int(char *where, int len);
 
+<<<<<<< HEAD
 int convertOctalToDecimal(int octalNumber);
+=======
+long long convertOctalToDecimal(int octalNumber);
+>>>>>>> b0db7511e086542f981ba411961f9ead212033e0

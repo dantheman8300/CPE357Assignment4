@@ -26,7 +26,8 @@ int main(int argc, char *argv[]){
     }
     
     header = readAndMakeHeader(fin);
-    printTableEntry(header);
+
+    printf("%d\n", convertOctalToDecimal(611));
 
     return 0;
 }
