@@ -111,13 +111,13 @@ headerPtr readAndMakeHeader(int fin){
 
 /* verbose option */
 void printTableEntry(headerPtr headerAddr){
-  printPerms(dec2oct(headerAddr->mode));
+  printPerms(convertDecimalToOctal(headerAddr->mode));
   printf(" ");
   printOwners(headerAddr->uname, headerAddr->gname);
   printf(" ");
-  printSize(dec2oct(headerAddr->size));
+  printSize(convertDecimalToOctal(headerAddr->size));
   printf(" ");
-  printMtime(dec2oct(headerAddr->mtime));
+  printMtime(convertDecimalToOctal(headerAddr->mtime));
   printf(" ");
   printName(headerAddr->name);
 }
@@ -310,7 +310,6 @@ void printPerms(mode_t mode){
     char *ret;
     int p_mask = 0400;
     char i = 9;
-    int val = convertDecimalToOctal(mode);
 
     ret = malloc(PERMS);
 
@@ -373,4 +372,20 @@ int convertDecimalToOctal(int decimalNumber)
     }
 
     return octalNumber;
+}
+
+long long convertOctalToDecimal(int octalNumber)
+{
+    int decimalNumber = 0, i = 0;
+
+    while(octalNumber != 0)
+    {
+        decimalNumber += (octalNumber%10) * pow(8,i);
+        ++i;
+        octalNumber/=10;
+    }
+
+    i = 1;
+
+    return decimalNumber;
 }
