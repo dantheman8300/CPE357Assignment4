@@ -92,7 +92,7 @@ struct Header {
   */
 };
 
-headerPtr readAndMakeHeader(int fin);
+void readAndMakeHeader(int fin, headerPtr header);
 
 void printPerms(mode_t mode);
 void printOwners(char *uname, char *gname);

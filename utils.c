@@ -95,8 +95,7 @@ void getHeaderPrefix(int fin, headerPtr headerAddr){
 }
 
 
-headerPtr readAndMakeHeader(int fin){
-    headerPtr header = malloc(sizeof(header));
+void readAndMakeHeader(int fin, headerPtr header){
 
     getHeaderName(fin, header);
     /*if(strlen(header->name) == 0){
