@@ -4,9 +4,9 @@
 int getHeaderName(int fin, headerPtr headerAddr){
   /* lseek(fin, NAME_OFFSET, SEEK_CUR); */
   if( read(fin, headerAddr->name, NAME_LENGTH) <= 0){
-    return 0;
+    return 1;
   } 
-  return 1;
+  return 0;
  
 }
 
@@ -100,8 +100,8 @@ headerPtr readAndMakeHeader(int fin){
     headerPtr header = malloc(sizeof(header));
 
     if(getHeaderName(fin, header)){
-      return NULL;
-    }  
+        return NULL;
+    }
     getHeaderMode(fin, header);
     getHeaderUid(fin, header);
     getHeaderGid(fin, header);
@@ -122,13 +122,16 @@ headerPtr readAndMakeHeader(int fin){
 }
 
 void printTable(int tar){
-  headerPtr header;
+    headerPtr header;
   
-  header = readAndMakeHeader(tar);
+    header = readAndMakeHeader(tar);
 
-  while(header != NULL){
+    while(header != NULL){
+      
     printTableEntry(header);  
-    lseek(tar, numberDataBlocks(header), SEEK_CUR);
+    printf("%d\n", numberDataBlocks(header));
+    lseek(tar, 12, SEEK_CUR);
+    lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
     header = readAndMakeHeader(tar);  
   }
 
@@ -345,7 +348,10 @@ void printPerms(mode_t mode){
     int p_mask = 0400;
     char i = 9;
 
-    ret = malloc(PERMS);
+    if( (ret = malloc(PERMS)) == NULL ){
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
 
     if(S_ISDIR(mode))
         strcat(ret, "d");
@@ -367,6 +373,8 @@ void printPerms(mode_t mode){
     }
     strcat(ret, "\0");
     printf("%s", ret);
+    free(ret);
+    return;
 }
 
 /* NICO FUNCTION IF NEEDED TO TEST */
