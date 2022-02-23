@@ -139,22 +139,6 @@ void clearHeader(headerPtr header){
 
 void printTable(int tar){
   headerPtr header = malloc(sizeof(header));
-/*
-  printf("%d\n", readAndMakeHeader(tar, header));
-  printTableEntry(header);  
-  lseek(tar, 12, SEEK_CUR);
-  lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
-  printf("%d\n", readAndMakeHeader(tar, header));
-  printTableEntry(header);  
-  lseek(tar, 12, SEEK_CUR);
-  lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
-  printf("%d\n", readAndMakeHeader(tar, header));
-  printTableEntry(header);  
-  lseek(tar, 12, SEEK_CUR);
-  lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
-  printf("%d\n", readAndMakeHeader(tar, header));
-  printTableEntry(header);  
-*/
 
   while(readAndMakeHeader(tar, header)){
     printTableEntry(header);
