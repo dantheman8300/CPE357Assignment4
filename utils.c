@@ -505,7 +505,9 @@ int extractFile(int fin, headerPtr headerAddr, int v){
 
   getData(fin, numDataBlocks, data);
 
-  if((fout = open(headerAddr->name, O_CREAT | O_WRONLY | O_TRUNC, headerAddr->mode & 0777)) < 0){
+  if((fout = open(headerAddr->name, 
+                  O_CREAT | O_WRONLY | O_TRUNC, 
+                  headerAddr->mode & 0777)) < 0){
     return 0;
   }
   if(v)
