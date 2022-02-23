@@ -113,13 +113,14 @@ int convertDecimalToOctal(int decimalNumber);
 
 void make_header(int fd, char *pathname);
 void write_file(int fd, struct stat sb, char *pathname);
+void set_strict(void);
 
 char det_file_type(struct stat sb);
 
-int insert_special_character(char *where, size_t size, int32_t val);
-
 uint32_t extract_special_int(char *where, int len);
 
+int insert_special_character(char *where, size_t size, int32_t val);
 int convertOctalToDecimal(int octalNumber);
-
 int oct2int(uint8_t *oct, int size);
+int has_char(char c, char *str);
+int get_strict(void);

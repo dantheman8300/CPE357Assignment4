@@ -1,5 +1,16 @@
 #include "utils.h"
 
+int strict;
+
+void set_strict(){
+    strict = 1;
+    return;
+}
+
+int get_strict(){
+    return strict; 
+}
+
 /* Note */
 int getHeaderName(int fin, headerPtr headerAddr){
   /* lseek(fin, NAME_OFFSET, SEEK_CUR); */
@@ -12,7 +23,6 @@ void getHeaderMode(int fin, headerPtr headerAddr){
     /* lseek(fin, MODE_OFFSET, SEEK_CUR); */
     char buff[9];
     char *ptr;
-    lseek(fin, MODE_OFFSET, SEEK_SET);
     read(fin, &buff, MODE_LENGTH);
     headerAddr->mode = strtol(buff, &ptr, 8);
 }
@@ -29,7 +39,7 @@ void getHeaderGid(int fin, headerPtr headerAddr){
 
 void getHeaderSize(int fin, headerPtr headerAddr){
     /*lseek(fin, SIZE_OFFSET, SEEK_CUR);  */
-    char buff[12];
+    char buff[13];
     char *ptr;
     read(fin, &buff, SIZE_LENGTH);
     headerAddr->size = strtol(buff, &ptr, 8);
@@ -91,6 +101,7 @@ void getHeaderDevminor(int fin, headerPtr headerAddr){
 void getHeaderPrefix(int fin, headerPtr headerAddr){
     /*lseek(fin, PREFIX_OFFSET, SEEK_CUR);  */
     read(fin, headerAddr->prefix, PREFIX_LENGTH);
+    lseek(fin, 12, SEEK_CUR); 
 }
 
 
@@ -154,35 +165,36 @@ void printTable(int tar){
 
 }
 
+
 /* verbose option */
 void printTableEntry(headerPtr headerAddr){
-  printPerms(headerAddr->mode);
-  printf(" ");
-  printOwners(headerAddr->uname, headerAddr->gname);
-  printf(" ");
-  printSize(convertDecimalToOctal(headerAddr->size));
-  printf(" ");
-  printMtime(headerAddr->mtime);
-  printf(" ");
-  printName(headerAddr->name);
-  printf("\n");
+    printPerms(headerAddr->mode);
+    printf(" ");
+    printOwners(headerAddr->uname, headerAddr->gname);
+    printf(" ");
+    printSize(convertDecimalToOctal(headerAddr->size));
+    printf(" ");
+    printMtime(headerAddr->mtime);
+    printf(" ");
+    printName(headerAddr->name);
+    printf("\n");
 }
 
 int numberDataBlocks(headerPtr headerAddr){
-  int size = headerAddr->size; 
-  int numBlocks = size / BLOCKSIZE;
-  if(size % BLOCKSIZE){
-    numBlocks++;
-  }
-  return numBlocks;
+    int size = headerAddr->size; 
+    int numBlocks = size / BLOCKSIZE;
+    if(size % BLOCKSIZE){
+        numBlocks++;
+    }
+    return numBlocks;
 }
 
 void printOwners(char *uname, char *gname){
-  printf("%s/%s", uname, gname);
+    printf("%s/%s", uname, gname);
 }
 
 void printSize(int size){
-  printf("%d", convertOctalToDecimal(size));
+    printf("%d", convertOctalToDecimal(size));
 }
 
 void printMtime(time_t mtime){
@@ -190,12 +202,6 @@ void printMtime(time_t mtime){
     struct tm *timer;
     timer = localtime(&mtime);
     strftime(t, 17, "%Y-%m-%d %R", timer);
-    /*printf("%4d-%02d-%02d %02d:%02d", localTime->tm_year + 1900,
-                                    localTime->tm_mon,
-                                    localTime->tm_mday,
-                                    localTime->tm_hour, 
-                                    localTime->tm_min
-                                    ); */
     printf("%s", t);
 
 }
@@ -230,6 +236,8 @@ void makeDataBlocks(int fin, int fout){
     all the files (or the singular file) of the path provided
 
     calls upon a helper function to write to the archive file
+
+    NOTE: no way of writing prefix attribute in the header.
 */
 void make_header(int fd, char *pathname){
     DIR *d;
@@ -311,7 +319,7 @@ void write_file(int fd, struct stat sb, char *pathname){
         }
         write(fd, name, 100);
     }
-    lseek(fd, 257, SEEK_SET);
+    /* lseek(fd, 257, SEEK_SET); */
     write(fd, "ustar\0", 6);
     write(fd, "00", 2); 
     user = *getpwuid(sb.st_uid);
@@ -420,36 +428,36 @@ int insert_special_character(char *where, size_t size, int32_t val){
     return err;
 }
 
+/* helper function found online to
+   help convert from base 10 to 8. */
 int convertDecimalToOctal(int decimalNumber)
 {
     int octalNumber = 0, i = 1;
-
     while (decimalNumber != 0)
     {
         octalNumber += (decimalNumber % 8) * i;
         decimalNumber /= 8;
         i *= 10;
     }
-
     return octalNumber;
 }
 
+/* helper function found online to
+   help convert from base 8 to 10. */
 int convertOctalToDecimal(int octalNumber)
 {
     int decimalNumber = 0, i = 0;
-
     while(octalNumber != 0)
     {
         decimalNumber += (octalNumber%10) * pow(8,i);
         ++i;
         octalNumber/=10;
     }
-
     i = 1;
-
     return decimalNumber;
 }
 
+/* Needed? */
 int oct2int(uint8_t *oct, int size){
   int dec = 0;
   int i;
@@ -460,4 +468,23 @@ int oct2int(uint8_t *oct, int size){
     currDig *= 8;
   }
   return dec;
+}
+
+/*  
+    has_char
+
+    helper function for parsing argv[1] (under proper usage)
+    to find what modes the user specifies.
+
+    Notes:
+    tested and confirmed functionality.
+*/
+int has_char(char c, char *str){
+    char *pt;
+    pt = str;
+    while(*pt){
+        if( c == *pt++)
+            return 1;
+    }
+    return 0;
 }
