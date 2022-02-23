@@ -1,11 +1,12 @@
 #include "utils.h"
 
 /* Note */
-void getHeaderName(int fin, headerPtr headerAddr){
+int getHeaderName(int fin, headerPtr headerAddr){
   /* lseek(fin, NAME_OFFSET, SEEK_CUR); */
-  if( read(fin, headerAddr->name, NAME_LENGTH) < NAME_LENGTH){
-    printf("fixthis\n");
+  if( read(fin, headerAddr->name, NAME_LENGTH) <= 0){
+    return 0;
   } 
+  return 1;
  
 }
 
@@ -98,7 +99,9 @@ void getHeaderPrefix(int fin, headerPtr headerAddr){
 headerPtr readAndMakeHeader(int fin){
     headerPtr header = malloc(sizeof(header));
 
-    getHeaderName(fin, header);  
+    if(getHeaderName(fin, header)){
+      return NULL;
+    }  
     getHeaderMode(fin, header);
     getHeaderUid(fin, header);
     getHeaderGid(fin, header);
@@ -122,10 +125,12 @@ void printTable(int tar){
   headerPtr header;
   
   header = readAndMakeHeader(tar);
-  printTableEntry(header);
-  lseek(tar, numberDataBlocks(header), SEEK_CUR);
 
-  /* Add loop */
+  while(header != NULL){
+    printTableEntry(header);  
+    lseek(tar, numberDataBlocks(header), SEEK_CUR);
+    header = readAndMakeHeader(tar);  
+  }
 
 }
 
@@ -135,7 +140,7 @@ void printTableEntry(headerPtr headerAddr){
   printf(" ");
   printOwners(headerAddr->uname, headerAddr->gname);
   printf(" ");
-  printSize(headerAddr->size);
+  printSize(convertDecimalToOctal(headerAddr->size));
   printf(" ");
   printMtime(headerAddr->mtime);
   printf(" ");
