@@ -108,6 +108,7 @@ int readAndMakeHeader(int fin, headerPtr header){
 
   strcpy(prevName, header->name);
   getHeaderName(fin, header);
+  printf("%s\n", header->name);
   if(strlen(header->name) == 0 || strcmp(prevName, header->name) == 0){
     return 0;
   }
@@ -409,6 +410,15 @@ void printPerms(mode_t mode, uint8_t  *t){
     return;
 }
 
+void extractFile(int fin, headerPtr headerAddr){
+  int fout;
+
+  readAndMakeHeader(fin, headerAddr);
+
+  printf("%s\n", headerAddr->name);
+
+}
+
 /* NICO FUNCTION IF NEEDED TO TEST */
 uint32_t extract_special_int(char *where, int len){
     int32_t val = -1;
@@ -494,3 +504,4 @@ int has_char(char c, char *str){
     }
     return 0;
 }
+

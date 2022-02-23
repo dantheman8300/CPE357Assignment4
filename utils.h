@@ -92,6 +92,8 @@ struct Header {
   */
 };
 
+void extractFile(int fin, headerPtr headerAddr);
+
 void clearHeader(headerPtr header);
 
 int readAndMakeHeader(int fin, headerPtr header);
