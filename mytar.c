@@ -76,35 +76,14 @@ int main(int argc, char *argv[]){
         }
       
     }
-
-    /*
-    if( has_char('c', argv[1]){
+    if( has_char('c', argv[1])){
         if (has_char('v', argv[1])){
-
+            printf("this case is currently not supported.\n");
         }
         else{
-
+            printf("this case is currently not supported.\n");
         }
     }
-    else if ( has_char('t', argv[1])){
-        if (has_char('v', argv[1])){
-
-        }
-        else{
-            
-        }
-    }
-    else if ( has_char('x', argv[1])){
-        if (has_char('v', argv[1])){
-            
-        }
-        else{
-            
-        }
-    }
-    */
-
-  
 
   close(fin);
   return 0;

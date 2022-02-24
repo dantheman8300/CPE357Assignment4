@@ -73,7 +73,7 @@ struct Header {
   char gname[GNAME_LENGTH];
   uint8_t devmajor[DEVMAJOR_LENGTH];
   uint8_t devminor[DEVMINOR_LENGTH];
-  uint8_t prefix[PREFIX_LENGTH];
+  char prefix[PREFIX_LENGTH];
   /*
   uint8_t uid[UID_LENGTH];
   uint8_t gid[GID_LENGTH];
@@ -124,6 +124,7 @@ void print_oneshot_nov(int tar, char *s);
 void print_oneshot(int tar, char *s);
 void print_DIR(int tar, headerPtr header, char *s);
 void print_DIR_nov(int tar, headerPtr header, char *s);
+void flushname(headerPtr header);
 
 
 char det_file_type(struct stat sb);

@@ -21,7 +21,7 @@ utils.o: utils.c utils.h
 
 test : $(TARGET)
 	@echo Testing $(TARGET): 
-	./mytar EZDIR_tarfile.tar output.txt > diff1.txt
-	tar tvf EZDIR_tarfile.tar > diff2.txt
+	./mytar tvf EZDIR_tarfile.tar basic> diff1.txt
+	~pn-cs357/demos/mytar tvf EZDIR_tarfile.tar basic> diff2.txt
 	diff -s diff1.txt diff2.txt
 	@echo testing complete...

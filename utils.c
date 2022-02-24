@@ -268,10 +268,8 @@ void printTableEntry(headerPtr headerAddr){
     if( strlen(headerAddr->prefix)){ 
         printf("%s/", headerAddr->prefix);
     }
-    printName(headerAddr->name);
-    /* if( strlen(headerAddr->linkname) ){
-        printf(" -> %s", headerAddr->linkname);
-    }*/
+    /* printName(headerAddr->name); */
+    flushname(headerAddr);
     printf("\n");
 }
 
@@ -301,7 +299,24 @@ void printMtime(time_t mtime){
 
 }
 
+void flushname(headerPtr header){
+    char buff[101], buff2[156];
+    strncpy(buff, header->name, 100);
+    strncpy(buff2, header->prefix, 155);
+    if(header->name[99] != '\0'){
+        strcat(buff, "\0");
+    }
+    if(header->prefix[154] != '\0'){
+        strcat(buff2, "\0");
+    }
+    if(strlen(header->prefix) > 0){
+        printf("%s/%s", buff2, buff);
+    }
+    printf("%s", buff);
+}
+
 void printName(char *name){
+    //printf("%d\n", strlen(name));
     printf("%s", name);
 }
 
@@ -513,7 +528,8 @@ int extractFile(int fin, headerPtr headerAddr, int v){
 
   getData(fin, numDataBlocks, data);
 
-  if((fout = open(headerAddr->name, O_CREAT | O_WRONLY | O_TRUNC, headerAddr->mode & 0777)) < 0){
+  if((fout = open(headerAddr->name, O_CREAT | O_WRONLY | O_TRUNC, \
+  headerAddr->mode & 0777)) < 0){
     return 0;
   }
   if(v)
