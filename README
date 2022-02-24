@@ -1,3 +1,7 @@
 Name(s):  Daniel Leavitt (dpleavit) & Mark Kong (mkong04)
 Special Instructions:	N/A
-Notes:  N/A
+Notes:  
+        - Wrote c but never got to test it
+        - We got some of t but did not figure out how successfully implement 
+          the recursive traversing for deep trees
+        
