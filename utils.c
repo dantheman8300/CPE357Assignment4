@@ -153,9 +153,6 @@ void print_DIR(int tar, headerPtr header, char *s){
           lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
             break;
         }
-        if (*header->typeflag == '5'){
-          print_DIR(tar, header, header->name);
-        }
         printTableEntry(header);
         lseek(tar, 12, SEEK_CUR);
         lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
@@ -218,12 +215,17 @@ void print_oneshot(int tar, char *s){
         lseek(tar, numberDataBlocks(header) * 512, SEEK_CUR);
     }
 
-
-
-    // printf("tar: %s: Not found in archive\n", s);
-    // printf("tar: Exiting with failure status due to previous errors\n");
-    // exit(3);
+    printf("tar: %s: Not found in archive\n", s);
+    printf("tar: Exiting with failure status due to previous errors\n");
+    exit(3);
 }
+
+
+
+
+
+
+
 
 void printTable(int tar){
   headerPtr header = malloc(sizeof(header));
@@ -539,6 +541,7 @@ int extractFile(int fin, headerPtr headerAddr, int v){
                   headerAddr->mode & 0777)) < 0){
     return 0;
   }
+
   if(v)
     printf("%s\n", headerAddr->name);
 

@@ -1,7 +1,23 @@
 Name(s):  Daniel Leavitt (dpleavit) & Mark Kong (mkong04)
 Special Instructions:	N/A
-Notes:  
-        - Wrote c but never got to test it
-        - We got some of t but did not figure out how successfully implement 
-          the recursive traversing for deep trees
-        
+Notes:  Hi Dr. Nico, we unfortuantely were not able to get as far with the 
+        testcases we would have liked to. We got a lot of code implemented,
+        but our main downfall was not being able to succesfully implement 
+        the optional 4th argument, and concatening name with prefix (prefix
+        showed up blank for some reason). We ended up not having enough time
+        to test and debug everything. 
+
+        For c, we were able to write code but never got to test it as we 
+        prioritized x and t. 
+
+        For t, we believe that our code is able to support the full 
+        functionality as described in the spec. However, when running into 
+        tar files where the name attribute of the file was greater than 100 
+        bytes, we ran into an "overflow" error preventing us to print out the 
+        original file name correctly, even though the otherparameters in the 
+        "verbose" case were correct.
+
+        For x, we were able to implement code that could extract files from
+        tars that had one or more files. We did not have time to implement it
+        any further for the other requirements, including the optional name 
+        argument. 
