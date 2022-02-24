@@ -73,7 +73,7 @@ struct Header {
   char gname[GNAME_LENGTH];
   uint8_t devmajor[DEVMAJOR_LENGTH];
   uint8_t devminor[DEVMINOR_LENGTH];
-  uint8_t prefix[PREFIX_LENGTH];
+  char prefix[PREFIX_LENGTH];
   /*
   uint8_t uid[UID_LENGTH];
   uint8_t gid[GID_LENGTH];
